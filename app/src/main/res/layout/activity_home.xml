@@ -1,21 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorAccent"
     tools:context=".HomeActivity">
-    <Button
-        android:id="@+id/logout_button"
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingBottom="100dp">
+        <!-- Contenido scrollable
+
+        <FrameLayout
+            android:id="@+id/contenedorFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
+        -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/textViewHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/textViewHome1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/textViewHome2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerViewCurso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabAlignmentMode="center"
+        app:fabCradleMargin="10dp"
+        app:fabCradleRoundedCornerRadius="10dp"
+        app:fabCradleVerticalOffset="5dp"
+        app:hideOnScroll="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatActionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Salir" />
+        app:backgroundTint="@color/colorAccent"
+        app:layout_anchor="@id/bottomAppBar"
+        app:srcCompat="@drawable/ic_baseline_power_settings_new_24_white" />
 
-    <TextView
-        android:id="@+id/textViewHome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView" />
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

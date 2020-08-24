@@ -16,10 +16,9 @@ public class GoogleSingInService {
     public static GoogleSignInClient getMGoogleSignInClient(Context context) {
         if (mGoogleSignInClient == null) {
             GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    //.requestIdToken(context.getResources().getString(R.string.server_client_id))
+                    .requestIdToken(context.getResources().getString(R.string.server_client_id_debug))
                     .requestEmail()
                     .build();
-            System.out.println(context.getResources().getString(R.string.server_client_id));
             mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
         }
         return mGoogleSignInClient;

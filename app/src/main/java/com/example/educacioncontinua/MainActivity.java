@@ -10,8 +10,8 @@ import android.util.Log;
 import android.view.View;
 
 import com.example.educacioncontinua.config.GoogleSingInService;
-import com.example.educacioncontinua.config.RetrofitConfig;
 import com.example.educacioncontinua.config.ToastrConfig;
+import com.example.educacioncontinua.dagger.BaseApplication;
 import com.example.educacioncontinua.interfaces.RetrofitApi;
 import com.example.educacioncontinua.models.Usuario;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -20,6 +20,8 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,13 +33,21 @@ public class MainActivity extends AppCompatActivity implements
     private static final int RC_SIGN_IN = 9001;
     private SignInButton signInButton;
 
+    @Inject
+    RetrofitApi retrofitApi;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setUpDagger();
         signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setOnClickListener(this);
+    }
+
+    private void setUpDagger() {
+        ((BaseApplication) getApplication()).getRetrofitComponent().inject(this);
     }
 
     @Override
@@ -58,8 +68,8 @@ public class MainActivity extends AppCompatActivity implements
 
     private void verificarUsuario(@Nullable GoogleSignInAccount account) {
         if (account != null) {
-            RetrofitApi retrofitApi = RetrofitConfig.getRetrofit().create(RetrofitApi.class);
-            Call<Usuario> call = retrofitApi.verificarUser(account.getEmail());
+            System.out.println("token: " + account.getIdToken());
+            Call<Usuario> call = retrofitApi.verificarUser(account.getIdToken());
             call.enqueue(new Callback<Usuario>() {
                 @Override
                 public void onResponse(Call<Usuario> call, Response<Usuario> response) {
@@ -113,10 +123,16 @@ public class MainActivity extends AppCompatActivity implements
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (code == 403) {
-                            ToastrConfig.mensaje(MainActivity.this, "No tienes los permisos necesarios");
-                        } else {
-                            ToastrConfig.mensaje(MainActivity.this, "No te encuentras registrado");
+                        switch (code) {
+                            case 403:
+                                ToastrConfig.mensaje(MainActivity.this, "No tienes los permisos necesarios para ingresar");
+                                break;
+                            case 500:
+                                ToastrConfig.mensaje(MainActivity.this, "No te encuentras registrado/a");
+                                break;
+                            case 400:
+                                ToastrConfig.mensaje(MainActivity.this, "Su Token de validación no es valida");
+                                break;
                         }
                     }
                 });

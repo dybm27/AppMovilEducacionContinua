@@ -14,12 +14,9 @@ import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface RetrofitApi {
-    @GET("validateLogin/{email}")
-    Call<Usuario> verificarUser(@Path("email") String email);
+    @GET("validateLogin/{token}")
+    Call<Usuario> verificarUser(@Path("token") String token);
 
     @GET("misCursosYEduContinua/{idUser}")
     Call<List<Curso>> obtenerCursos(@Path("idUser") int idUser);
-
-    @POST("api/token/{token}")
-    Call<Usuario> verificarToken(@Body Token token);
 }
