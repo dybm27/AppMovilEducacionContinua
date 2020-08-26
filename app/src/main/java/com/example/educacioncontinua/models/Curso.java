@@ -1,9 +1,12 @@
 package com.example.educacioncontinua.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 import java.util.List;
 
-public class Curso {
+public class Curso implements Parcelable {
     private Integer id;
     private String nombre;
     private Date fechaInicio;
@@ -99,5 +102,65 @@ public class Curso {
                 ", docenteResponsable='" + docenteResponsable + '\'' +
                 ", jornadas=" + jornadas +
                 '}';
+    }
+
+    protected Curso(Parcel in) {
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readInt();
+        }
+        nombre = in.readString();
+        fechaInicio = new Date(in.readLong());
+        fechaFin = new Date(in.readLong());
+        if (in.readByte() == 0) {
+            cantidadParticipantes = null;
+        } else {
+            cantidadParticipantes = in.readInt();
+        }
+        tipoEduContinua = in.readString();
+        programaResponsable = in.readString();
+        docenteResponsable = in.readString();
+        jornadas = in.createTypedArrayList(Jornada.CREATOR);
+    }
+
+    public static final Creator<Curso> CREATOR = new Creator<Curso>() {
+        @Override
+        public Curso createFromParcel(Parcel in) {
+            return new Curso(in);
+        }
+
+        @Override
+        public Curso[] newArray(int size) {
+            return new Curso[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        if (id == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(id);
+        }
+        parcel.writeString(nombre);
+        parcel.writeLong(fechaInicio.getTime());
+        parcel.writeLong(fechaFin.getTime());
+        if (cantidadParticipantes == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeInt(cantidadParticipantes);
+        }
+        parcel.writeString(tipoEduContinua);
+        parcel.writeString(programaResponsable);
+        parcel.writeString(docenteResponsable);
+        parcel.writeTypedList(jornadas);
     }
 }

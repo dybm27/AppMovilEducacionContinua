@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#BC0017</color>
-    <color name="colorPrimaryDark">#D32F2F</color>
+    <color name="colorPrimaryDark">#840000</color>
     <color name="colorAccent">#e8e8e8</color>
     <color name="colorWhite">#ffff</color>
     <color name="transparent">#00000000</color>
+    <color name="colorBtnFlotante">#818386</color>
 </resources>

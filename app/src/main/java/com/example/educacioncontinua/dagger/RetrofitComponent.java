@@ -2,6 +2,7 @@ package com.example.educacioncontinua.dagger;
 
 import com.example.educacioncontinua.HomeActivity;
 import com.example.educacioncontinua.MainActivity;
+import com.example.educacioncontinua.fragments.CursosFragment;
 
 import javax.inject.Singleton;
 
@@ -13,4 +14,6 @@ public interface RetrofitComponent {
     void inject(MainActivity mainActivity);
 
     void inject(HomeActivity homeActivity);
+
+    void inject(CursosFragment cursosFragment);
 }

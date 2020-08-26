@@ -9,4 +9,7 @@
     <string name="btnJornada">Boton Jornada</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_label">Buscar</string>
+    <string name="jornadas">Jornadas</string>
+    <string name="cargando">Cargando..</string>
 </resources>

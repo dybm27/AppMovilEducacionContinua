@@ -45,4 +45,9 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.28.3'
     //material design
     implementation 'com.google.android.material:material:1.2.0'
+    // refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    // scanner
+    implementation('com.journeyapps:zxing-android-embedded:4.1.0') { transitive = false }
+    implementation 'com.google.zxing:core:3.4.0'
 }

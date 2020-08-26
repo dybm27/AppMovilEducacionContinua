@@ -8,9 +8,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -23,6 +26,7 @@ import com.example.educacioncontinua.config.GoogleSingInService;
 import com.example.educacioncontinua.config.ToastrConfig;
 import com.example.educacioncontinua.dagger.BaseApplication;
 import com.example.educacioncontinua.fragments.CursosFragment;
+import com.example.educacioncontinua.fragments.JornadasQrFragment;
 import com.example.educacioncontinua.interfaces.RetrofitApi;
 import com.example.educacioncontinua.models.Curso;
 import com.example.educacioncontinua.models.Usuario;
@@ -42,15 +46,14 @@ import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView textViewHome;
+
     private BottomAppBar bottomAppBar;
     private FloatingActionButton floatingActionButton;
-    private List<Curso> cursos;
-    private RecyclerView recyclerView;
-    private CursoAdapter cursoAdapter;
+
 
     private FragmentTransaction fragmentTransaction;
     private Fragment fragmentCursos;
+    private ProgressDialog progressDialog;
 
     @Inject
     RetrofitApi retrofitApi;
@@ -59,32 +62,28 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        setUpProgressDialog();
         //setUpBottomAppBar();
         setUpDagger();
-        setUpView();
         obtenerCursos();
         floatingActionButton = findViewById(R.id.floatActionButton);
         floatingActionButton.setOnClickListener(this);
-        textViewHome = findViewById(R.id.textViewHome);
-        textViewHome.setText(Usuario.getUsuario().getEmail());
     }
 
     private void setUpDagger() {
         ((BaseApplication) getApplication()).getRetrofitComponent().inject(this);
     }
 
-    private void setUpView() {
-        cursos = new ArrayList<>();
-      /*
-      *   fragmentCursos = new CursosFragment(this, cursos);
-        getSupportFragmentManager().beginTransaction().add(R.id.contenedorFragment,fragmentCursos).commit();
-        * */
-        cursoAdapter = new CursoAdapter(this, cursos);
-        recyclerView = findViewById(R.id.recyclerViewCurso);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(cursoAdapter);
+    private void setUpProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+        //progressDialog.setIcon(R.mipmap.ic_launcher);
+        //progressDialog.setMessage("Cargando...");
+        progressDialog.show();
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setContentView(R.layout.progress_dialog);
+        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
     }
 
     @Override
@@ -140,22 +139,39 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<List<Curso>>() {
             @Override
             public void onResponse(Call<List<Curso>> call, Response<List<Curso>> response) {
+                progressDialog.dismiss();
                 try {
                     if (response.isSuccessful()) {
                         ToastrConfig.mensaje(HomeActivity.this, "OK");
-                        cursoAdapter.setData(response.body());
+                        abrirFragmento(response.body());
                     } else {
-                        ToastrConfig.mensaje(HomeActivity.this, "Error server");
+                        mensajeError();
+                      //  ToastrConfig.mensaje(HomeActivity.this, "Error server");
                     }
                 } catch (Exception ex) {
-                    ToastrConfig.mensaje(HomeActivity.this, "Error tipografico");
+                    mensajeError();
+                    //ToastrConfig.mensaje(HomeActivity.this, "Error tipografico");
                 }
             }
 
             @Override
             public void onFailure(Call<List<Curso>> call, Throwable t) {
-                ToastrConfig.mensaje(HomeActivity.this, "Grave Error");
+                progressDialog.dismiss();
+                mensajeError();
             }
         });
+    }
+
+    public void abrirFragmento(List<Curso> cursos) {
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("cursos", (ArrayList<? extends Parcelable>) cursos);
+        fragmentCursos = new CursosFragment();
+        fragmentCursos.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().add(R.id.contenedorFragment, fragmentCursos).commit();
+    }
+
+    public void mensajeError() {
+        ToastrConfig.mensaje(HomeActivity.this, "No fue posible obtener la informacion.. Ingrese nuevamente");
+        signOut();
     }
 }

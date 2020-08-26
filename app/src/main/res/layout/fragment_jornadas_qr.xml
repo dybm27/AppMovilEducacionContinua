@@ -1,14 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.JornadasQrFragment">
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/jornadas">
+
+        <AutoCompleteTextView
+            android:id="@+id/filled_exposed_dropdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:gravity="center"
+        tools:context="example.zxing.TabbedScanning$ScanFragment">
 
-</FrameLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.journeyapps.barcodescanner.DecoratedBarcodeView
+                android:id="@+id/barcode_view"
+                android:layout_width="366dp"
+                android:layout_height="369dp" />
+
+            <Button
+                android:id="@+id/btn_flash"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:text="Flash" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
