@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/jornadasFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
@@ -22,26 +23,46 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         tools:context="example.zxing.TabbedScanning$ScanFragment">
 
+
+        <com.journeyapps.barcodescanner.DecoratedBarcodeView
+            android:id="@+id/barcode_scanner"
+            android:layout_width="wrap_content"
+            android:layout_height="400dp"
+            android:layout_alignParentTop="true" />
+
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
+            android:id="@+id/buttonsLayout"
+            android:layout_width="157dp"
+            android:layout_height="122dp"
+            android:layout_below="@+id/barcode_scanner"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="17dp"
+            android:layout_marginTop="45dp"
             android:orientation="vertical">
 
-            <com.journeyapps.barcodescanner.DecoratedBarcodeView
-                android:id="@+id/barcode_view"
-                android:layout_width="366dp"
-                android:layout_height="369dp" />
+            <Button
+                android:id="@+id/btnPause"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pause" />
 
             <Button
-                android:id="@+id/btn_flash"
-                android:layout_width="wrap_content"
+                android:id="@+id/btnResume"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|center"
-                android:text="Flash" />
+                android:text="Resume" />
         </LinearLayout>
+
+        <View
+            android:id="@+id/centerHorizont"
+            android:layout_width="204dp"
+            android:layout_height="162dp"
+            android:layout_below="@+id/barcode_scanner"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="12dp" />
+
     </RelativeLayout>
 </LinearLayout>

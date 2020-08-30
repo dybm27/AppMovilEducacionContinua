@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -146,7 +147,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                         abrirFragmento(response.body());
                     } else {
                         mensajeError();
-                      //  ToastrConfig.mensaje(HomeActivity.this, "Error server");
+                        //  ToastrConfig.mensaje(HomeActivity.this, "Error server");
                     }
                 } catch (Exception ex) {
                     mensajeError();
@@ -174,4 +175,5 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         ToastrConfig.mensaje(HomeActivity.this, "No fue posible obtener la informacion.. Ingrese nuevamente");
         signOut();
     }
+
 }

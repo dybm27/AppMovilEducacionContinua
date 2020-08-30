@@ -4,9 +4,7 @@
     package="com.example.educacioncontinua">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
     <application

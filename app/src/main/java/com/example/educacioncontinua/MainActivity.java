@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private SignInButton signInButton;
-    private Button buttonPrueba;
 
     @Inject
     RetrofitApi retrofitApi;
@@ -46,8 +45,6 @@ public class MainActivity extends AppCompatActivity implements
         signInButton = findViewById(R.id.sign_in_button);
         signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setOnClickListener(this);
-        buttonPrueba = findViewById(R.id.btnPrueba);
-        buttonPrueba.setOnClickListener(this);
     }
 
     private void setUpDagger() {
@@ -59,14 +56,6 @@ public class MainActivity extends AppCompatActivity implements
         switch (v.getId()) {
             case R.id.sign_in_button:
                 signIn();
-                break;
-            case R.id.btnPrueba:
-                Usuario usuario = new Usuario();
-                usuario.setId(12);
-                usuario.setEmail("dumaryeksel@XD.com");
-                usuario.setEmail("majumba@XD.com");
-                Usuario.setUsuario(usuario);
-                abrirActivityHome();
                 break;
         }
     }
@@ -142,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements
                             case 500:
                                 ToastrConfig.mensaje(MainActivity.this, "No te encuentras registrado/a");
                                 break;
-                            case 400:
+                            case 401:
                                 ToastrConfig.mensaje(MainActivity.this, "Su Token de validación no es valida");
                                 break;
                         }

@@ -12,10 +12,14 @@ public class Jornada implements Parcelable {
     private Integer idEducacionContinua;
     private Date fechaInicioEduContinua;
     private Date fechaFinEduContinua;
+    private String fechaJornadaString;
+    private String horaInicioString;
+    private String horaFinString;
 
     public Jornada() {
 
     }
+
 
     public Integer getId() {
         return id;
@@ -65,6 +69,29 @@ public class Jornada implements Parcelable {
         this.fechaFinEduContinua = fechaFinEduContinua;
     }
 
+    public String getHoraInicioString() {
+        return horaInicioString;
+    }
+
+    public void setHoraInicioString(String horaInicioString) {
+        this.horaInicioString = horaInicioString;
+    }
+
+    public String getHoraFinString() {
+        return horaFinString;
+    }
+
+    public void setHoraFinString(String horaFinString) {
+        this.horaFinString = horaFinString;
+    }
+
+    public String getFechaJornadaString() {
+        return fechaJornadaString;
+    }
+
+    public void setFechaJornadaString(String fechaJornadaString) {
+        this.fechaJornadaString = fechaJornadaString;
+    }
 
     public Jornada(Parcel in) {
         if (in.readByte() == 0) {
@@ -81,6 +108,9 @@ public class Jornada implements Parcelable {
         }
         fechaInicioEduContinua = new Date(in.readLong());
         fechaFinEduContinua = new Date(in.readLong());
+        fechaJornadaString = in.readString();
+        horaInicioString = in.readString();
+        horaFinString = in.readString();
     }
 
     public static final Creator<Jornada> CREATOR = new Creator<Jornada>() {
@@ -118,5 +148,9 @@ public class Jornada implements Parcelable {
         }
         parcel.writeLong(fechaInicioEduContinua.getTime());
         parcel.writeLong(fechaFinEduContinua.getTime());
+        parcel.writeString(fechaJornadaString);
+        parcel.writeString(horaInicioString);
+        parcel.writeString(horaFinString);
+
     }
 }
