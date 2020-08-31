@@ -17,6 +17,6 @@ public interface RetrofitApi {
     @GET("misCursosYEduContinua/{idUser}")
     Call<List<Curso>> obtenerCursos(@Path("idUser") int idUser);
 
-    @GET("misCursosYEduContinua/{idEdu}/{idJornada}/{qr}")
+    @GET("asistencia/{idEdu}/{idJornada}/{qr}")
     Call<RespuestaAsistencia> asistencia(@Path("idEdu") int idEdu, @Path("idJornada") int idJornada, @Path("qr") String qr);
 }

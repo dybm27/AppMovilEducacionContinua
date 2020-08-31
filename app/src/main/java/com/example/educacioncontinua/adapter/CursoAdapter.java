@@ -95,10 +95,11 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoAdapter
         Animation animation = AnimationUtils.loadAnimation(context, R.anim.alpha);
         holder.imageView.startAnimation(animation);
         jornadas = cursos.get(posicion).getJornadas();
-
         if (jornadas.size() != 0) {
             Bundle bundle = new Bundle();
             bundle.putParcelableArrayList("jornadas", (ArrayList<? extends Parcelable>) jornadas);
+            bundle.putInt("idEduContinua", cursos.get(posicion).getId());
+            bundle.putString("nombreEvento", cursos.get(posicion).getNombre());
             JornadasQrFragment jornadasQrFragment = new JornadasQrFragment();
             jornadasQrFragment.setArguments(bundle);
             FragmentManager fragmentManager = ((HomeActivity) context).getSupportFragmentManager();
@@ -106,7 +107,7 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoAdapter
                     .replace(R.id.contenedorFragment, jornadasQrFragment)
                     .addToBackStack(null)
                     .commit();
-        }else {
+        } else {
             ToastrConfig.mensaje(context, "No hay Jornadas Disponibles");
         }
     }

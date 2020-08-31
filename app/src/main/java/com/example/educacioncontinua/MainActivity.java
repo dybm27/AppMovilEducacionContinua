@@ -8,7 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.example.educacioncontinua.config.GoogleSingInService;
 import com.example.educacioncontinua.config.ToastrConfig;
@@ -21,6 +25,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.shobhitpuri.custombuttons.GoogleSignInButton;
 
 import javax.inject.Inject;
 
@@ -32,7 +37,9 @@ public class MainActivity extends AppCompatActivity implements
         View.OnClickListener {
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
-    private SignInButton signInButton;
+    private GoogleSignInButton signInButton;
+    private ImageView diseñoTop, diseñoBot;
+    private Animation topAnimation, bottomAnimation, lestAnimation;
 
     @Inject
     RetrofitApi retrofitApi;
@@ -40,11 +47,21 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        //Animations
+        topAnimation = AnimationUtils.loadAnimation(this, R.anim.top_animation_login);
+        bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation_login);
+
         setUpDagger();
+        diseñoTop = findViewById(R.id.imageViewDiseñoLoginTop);
+        diseñoBot = findViewById(R.id.imageViewDiseñoLoginBottom);
         signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        // signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setOnClickListener(this);
+
+        diseñoTop.setAnimation(topAnimation);
+        diseñoBot.setAnimation(bottomAnimation);
     }
 
     private void setUpDagger() {
@@ -77,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements
                     try {
                         if (response.isSuccessful()) {
                             Usuario.setUsuario(response.body());
-                            ToastrConfig.mensaje(MainActivity.this, "Logueado");
                             abrirActivityHome();
                         } else {
                             revokeAccess(response.code());
@@ -132,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements
                                 ToastrConfig.mensaje(MainActivity.this, "No te encuentras registrado/a");
                                 break;
                             case 401:
-                                ToastrConfig.mensaje(MainActivity.this, "Su Token de validación no es valida");
+                                ToastrConfig.mensaje(MainActivity.this, "Su Token de validación no es valido");
                                 break;
                         }
                     }

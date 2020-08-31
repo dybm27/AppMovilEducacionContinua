@@ -12,4 +12,10 @@
     <string name="search_label">Buscar</string>
     <string name="jornadas">Jornadas</string>
     <string name="cargando">Cargando..</string>
+    <string name="mensajeSinPermiso">Sin permiso de Camara. Este permiso es necesario para poder usar el lector QR</string>
+    <string name="icon_date">Fecha</string>
+    <string name="titulo">CURSOS Y EVENTOS DE EDUCACIÓN CONTINUA UFPS</string>
+    <string name="btn_google">Iniciar Sesión</string>
+    <string name="verificando">Verificando...</string>
+    <string name="tituloCursos">BIENVENIDO/A.. LISTA DE EVENTOS Y CURSOS DISPONIBLES</string>
 </resources>

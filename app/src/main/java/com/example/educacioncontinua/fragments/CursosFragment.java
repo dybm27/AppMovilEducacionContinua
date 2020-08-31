@@ -36,7 +36,7 @@ import retrofit2.Response;
 
 public class CursosFragment extends Fragment {
 
-    private TextView textViewHome;
+    private TextView textViewNombre, textViewTipo;
     private List<Curso> cursos;
     private RecyclerView recyclerView;
     private CursoAdapter cursoAdapter;
@@ -66,12 +66,33 @@ public class CursosFragment extends Fragment {
     }
 
     private void setUpDagger() {
-        ((BaseApplication) getActivity().getApplication()).getRetrofitComponent().inject(this);
+        ((BaseApplication) Objects.requireNonNull(getActivity()).getApplication()).getRetrofitComponent().inject(this);
     }
 
     private void setUpView(View view) {
-        textViewHome = view.findViewById(R.id.textViewHome);
-        textViewHome.setText(Usuario.getUsuario().getEmail());
+        textViewNombre = view.findViewById(R.id.textViewNombre);
+        textViewTipo = view.findViewById(R.id.textViewTipo);
+        String nombre = Usuario.getUsuario().getPrimerNombre() + " " + Usuario.getUsuario().getSegundoNombre()
+                + " " + Usuario.getUsuario().getPrimerApellido() + " " + Usuario.getUsuario().getSegundoApellido();
+        String tipo = verificarTipo();
+        textViewNombre.setText(nombre);
+        textViewTipo.setText(tipo);
+    }
+
+    private String verificarTipo() {
+        if (Usuario.getUsuario().getAdministrativo()) {
+            return "Administrativo";
+        }
+        if (Usuario.getUsuario().getEstudiante()) {
+            return "Estudiante";
+        }
+        if (Usuario.getUsuario().getExterno()) {
+            return "Externo";
+        }
+        if (Usuario.getUsuario().getGraduado()) {
+            return "Graduado";
+        }
+        return "Docente";
     }
 
     private void setUpRecycler(View view) {

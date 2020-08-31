@@ -3,26 +3,19 @@ package com.example.educacioncontinua;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.educacioncontinua.adapter.CursoAdapter;
 import com.example.educacioncontinua.config.GoogleSingInService;
 import com.example.educacioncontinua.config.ToastrConfig;
 import com.example.educacioncontinua.dagger.BaseApplication;
@@ -38,6 +31,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -51,11 +45,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private BottomAppBar bottomAppBar;
     private FloatingActionButton floatingActionButton;
 
-
     private FragmentTransaction fragmentTransaction;
     private Fragment fragmentCursos;
     private ProgressDialog progressDialog;
 
+    private final int REQUEST_ACCESS_FINE = 0;
     @Inject
     RetrofitApi retrofitApi;
 
@@ -143,15 +137,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 progressDialog.dismiss();
                 try {
                     if (response.isSuccessful()) {
-                        ToastrConfig.mensaje(HomeActivity.this, "OK");
                         abrirFragmento(response.body());
                     } else {
                         mensajeError();
-                        //  ToastrConfig.mensaje(HomeActivity.this, "Error server");
                     }
                 } catch (Exception ex) {
                     mensajeError();
-                    //ToastrConfig.mensaje(HomeActivity.this, "Error tipografico");
                 }
             }
 
@@ -169,6 +160,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         fragmentCursos = new CursosFragment();
         fragmentCursos.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().add(R.id.contenedorFragment, fragmentCursos).commit();
+        verificarPermisoCamara();
     }
 
     public void mensajeError() {
@@ -176,4 +168,22 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         signOut();
     }
 
+    private void verificarPermisoCamara() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, REQUEST_ACCESS_FINE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_ACCESS_FINE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                ToastrConfig.mensaje(this, "Permiso de Camara Aceptado");
+            } else {
+                ToastrConfig.mensaje(this, "Permiso de Camara Denegado");
+            }
+        }
+
+    }
 }
