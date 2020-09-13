@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size_splash">20sp</dimen>
+    <dimen name="text_size_splash_land">50sp</dimen>
+    <dimen name="margin_check">20dp</dimen>
+</resources>

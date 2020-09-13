@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class RespuestaAsistencia {
     @SerializedName("nombrePersona")
     private String nombre;
-    @SerializedName("numeroPersona")
+    @SerializedName("numeroDocumento")
     private String documento;
     private String tipoParticipante;
 

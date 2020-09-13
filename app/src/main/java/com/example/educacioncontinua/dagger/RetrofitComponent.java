@@ -2,6 +2,7 @@ package com.example.educacioncontinua.dagger;
 
 import com.example.educacioncontinua.HomeActivity;
 import com.example.educacioncontinua.MainActivity;
+import com.example.educacioncontinua.SplashActivity;
 import com.example.educacioncontinua.fragments.CursosFragment;
 import com.example.educacioncontinua.fragments.JornadasQrFragment;
 
@@ -19,4 +20,6 @@ public interface RetrofitComponent {
     void inject(CursosFragment cursosFragment);
 
     void inject(JornadasQrFragment jornadasQrFragment);
+
+    void inject(SplashActivity splashActivity);
 }

@@ -4,20 +4,26 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.educacioncontinua.config.GoogleSingInService;
 import com.example.educacioncontinua.config.ToastrConfig;
 import com.example.educacioncontinua.dagger.BaseApplication;
 import com.example.educacioncontinua.interfaces.RetrofitApi;
+import com.example.educacioncontinua.models.RespuestaAsistencia;
 import com.example.educacioncontinua.models.Usuario;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -54,15 +60,18 @@ public class MainActivity extends AppCompatActivity implements
         bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation_login);
 
         setUpDagger();
-        diseñoTop = findViewById(R.id.imageViewDiseñoLoginTop);
-        diseñoBot = findViewById(R.id.imageViewDiseñoLoginBottom);
+        //diseñoTop = findViewById(R.id.imageViewDiseñoLoginTop);
+        //diseñoBot = findViewById(R.id.imageViewDiseñoLoginBottom);
         signInButton = findViewById(R.id.sign_in_button);
         // signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setOnClickListener(this);
 
-        diseñoTop.setAnimation(topAnimation);
-        diseñoBot.setAnimation(bottomAnimation);
+        //diseñoTop.setAnimation(topAnimation);
+        //diseñoBot.setAnimation(bottomAnimation);
+
     }
+
+
 
     private void setUpDagger() {
         ((BaseApplication) getApplication()).getRetrofitComponent().inject(this);
@@ -86,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements
 
     private void verificarUsuario(@Nullable GoogleSignInAccount account) {
         if (account != null) {
-            System.out.println("token: " + account.getIdToken());
             Call<Usuario> call = retrofitApi.verificarUser(account.getIdToken());
             call.enqueue(new Callback<Usuario>() {
                 @Override

@@ -1,6 +1,8 @@
 package com.example.educacioncontinua.fragments;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -10,6 +12,8 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +21,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.ProgressBar;
-import android.widget.Spinner;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.educacioncontinua.R;
@@ -55,13 +58,20 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
     private DecoratedBarcodeView barcodeView;
     private BeepManager beepManager;
     private String lastText;
-    private TextView textViewSinPermiso, textViewDocumento, textViewNombre,
-            textViewTipoParticipante, textViewError, textViewTitulo, textViewSinResultado;
+    private TextView textViewSinPermiso;
     private int idEduContinua, idJornada;
     private String qr;
     private AutoCompleteTextView editTextFilledExposedDropdown;
-    private ProgressDialog progressDialog;
+    private Dialog dialogVerificando;
     private LinearLayoutCompat linearLayoutResultados;
+
+    // modal exito
+    private TextView textViewNombre, textViewTipo, textViewDocumento;
+    private Button btnModalExito;
+    // modal error
+    private TextView textViewError;
+    private Button btnModalError;
+    private AlertDialog modalExito, modalError;
 
     @Inject
     RetrofitApi retrofitApi;
@@ -88,6 +98,9 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
         }
         llenarAdapter();
         setUpDagger();
+        setUpProgressVerificar();
+        setUpModalExito();
+        setUpModalError();
         return view;
     }
 
@@ -96,24 +109,78 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
         jornadas = datosRecuperados.getParcelableArrayList("jornadas");
         editTextFilledExposedDropdown = view.findViewById(R.id.filled_exposed_dropdown);
         textViewSinPermiso = view.findViewById(R.id.textViewSinPermiso);
-        textViewNombre = view.findViewById(R.id.textViewNombre);
-        textViewTipoParticipante = view.findViewById(R.id.textViewTipoParticipante);
-        textViewDocumento = view.findViewById(R.id.textViewDocumento);
-        textViewError = view.findViewById(R.id.textViewError);
-        textViewTitulo = view.findViewById(R.id.textViewTitulo);
-        textViewSinResultado = view.findViewById(R.id.textViewSinResultados);
-        linearLayoutResultados = view.findViewById(R.id.linearLayoutResultados);
+        TextView textViewTitulo = view.findViewById(R.id.textViewTitulo);
         textViewTitulo.setText(datosRecuperados.getString("nombreEvento"));
         barcodeView = (DecoratedBarcodeView) view.findViewById(R.id.barcode_scanner);
     }
 
-    private void setUpProgressDialog() {
-        progressDialog = new ProgressDialog(getContext());
-        progressDialog.show();
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setContentView(R.layout.progress_dialog_jornadas);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    private void setUpProgressVerificar() {
+        dialogVerificando = new Dialog(Objects.requireNonNull(getContext()));
+        dialogVerificando.setCancelable(false);
+        dialogVerificando.setCanceledOnTouchOutside(false);
+        dialogVerificando.setContentView(R.layout.progress_bar_jornadas);
+        dialogVerificando.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+    }
+
+    private void setUpModalExito() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.modal_jornadas_exito, null);
+        builder.setView(view);
+        modalExito = builder.create();
+        modalExito.setCancelable(false);
+        modalExito.setCanceledOnTouchOutside(false);
+        Objects.requireNonNull(modalExito.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        textViewNombre = view.findViewById(R.id.textViewNombreModal);
+        textViewTipo = view.findViewById(R.id.textViewTipoModal);
+        textViewDocumento = view.findViewById(R.id.textViewDocumentoModal);
+        btnModalExito = view.findViewById(R.id.btnModalExito);
+        btnModalExito.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                modalExito.dismiss();
+                resume();
+            }
+        });
+    }
+
+    private void abrirModalExito(RespuestaAsistencia respuestaAsistencia) {
+        modalExito.show();
+        SpannableString text1 = new SpannableString(respuestaAsistencia.getNombre());
+        text1.setSpan(new UnderlineSpan(), 0, text1.length(), 0);
+        textViewNombre.setText(text1);
+        SpannableString text2 = new SpannableString(respuestaAsistencia.getTipoParticipante());
+        text2.setSpan(new UnderlineSpan(), 0, text2.length(), 0);
+        textViewTipo.setText(text2);
+        SpannableString text3 = new SpannableString(respuestaAsistencia.getDocumento());
+        text3.setSpan(new UnderlineSpan(), 0, text3.length(), 0);
+        Log.e("error", respuestaAsistencia.getDocumento());
+        textViewDocumento.setText(text3);
+    }
+
+    private void setUpModalError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.modal_jornadas_error, null);
+        builder.setView(view);
+        modalError = builder.create();
+        modalError.setCancelable(false);
+        modalError.setCanceledOnTouchOutside(false);
+        Objects.requireNonNull(modalError.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        textViewError = view.findViewById(R.id.textViewErrorModal);
+        Button btnSalir = view.findViewById(R.id.btnModalError);
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                modalError.dismiss();
+                resume();
+            }
+        });
+    }
+
+    private void abrirModalError(String mensajeError) {
+        modalError.show();
+        textViewError.setText(mensajeError);
     }
 
     private boolean verificarPermisoCamara() {
@@ -160,6 +227,7 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
 
     private void upScanner(View view) {
         beepManager = new BeepManager(Objects.requireNonNull(getActivity()));
+        barcodeView.setStatusText("");
         Collection<BarcodeFormat> formats = Arrays.asList(BarcodeFormat.QR_CODE, BarcodeFormat.CODE_39);
         barcodeView.getBarcodeView().setDecoderFactory(new DefaultDecoderFactory(formats));
         barcodeView.initializeFromIntent(Objects.requireNonNull(getActivity()).getIntent());
@@ -169,13 +237,17 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
                 if (result.getText() == null) {
                     return;
                 }
-                setUpProgressDialog();
-                barcodeView.pause();
-                lastText = result.getText();
-                barcodeView.setStatusText(result.getText());
                 beepManager.playBeepSoundAndVibrate();
+                if (lastText != null) {
+                    if (lastText.equals(result.getText())) {
+                        abrirModalError("El Qr ya fue leído con éxito");
+                        return;
+                    }
+                }
+                dialogVerificando.show();
+                pause();
                 qr = result.getText();
-                verificarAsistencia();
+                verificarAsistencia(result.getText());
             }
 
             @Override
@@ -187,13 +259,13 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public void onResume() {
         super.onResume();
-        barcodeView.resume();
+        resume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        barcodeView.pause();
+        pause();
     }
 
     public void pause() {
@@ -208,64 +280,56 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
         ((BaseApplication) Objects.requireNonNull(getActivity()).getApplication()).getRetrofitComponent().inject(this);
     }
 
-    private void verificarAsistencia() {
+    private void verificarAsistencia(String resulQr) {
         Call<RespuestaAsistencia> call = retrofitApi.asistencia(idEduContinua, idJornada, qr);
         call.enqueue(new Callback<RespuestaAsistencia>() {
             @Override
             public void onResponse(Call<RespuestaAsistencia> call, Response<RespuestaAsistencia> response) {
-                barcodeView.resume();
-                progressDialog.dismiss();
+                dialogVerificando.dismiss();
                 try {
                     if (response.isSuccessful()) {
+                        lastText = resulQr;
                         RespuestaAsistencia respuestaAsistencia = response.body();
                         assert respuestaAsistencia != null;
-                        textViewError.setVisibility(View.GONE);
-                        textViewSinResultado.setVisibility(View.GONE);
-                        textViewNombre.setText(respuestaAsistencia.getNombre());
-                        textViewTipoParticipante.setText(respuestaAsistencia.getTipoParticipante());
-                        textViewDocumento.setText(respuestaAsistencia.getDocumento());
-                        linearLayoutResultados.setVisibility(View.VISIBLE);
+                        abrirModalExito(respuestaAsistencia);
                         ToastrConfig.mensaje(getContext(), "Asistencia Registrada");
                     } else {
-                        textViewError.setVisibility(View.VISIBLE);
-                        linearLayoutResultados.setVisibility(View.GONE);
-                        textViewSinResultado.setVisibility(View.GONE);
-                        mensajeError(response.code());
+                        lastText = null;
+                        abrirModalError(mensajeError(response.code()));
                     }
                 } catch (Exception ex) {
-                    textViewError.setVisibility(View.VISIBLE);
-                    linearLayoutResultados.setVisibility(View.GONE);
-                    textViewSinResultado.setVisibility(View.GONE);
+                    lastText = null;
+                    Log.e("Errorrrrrr =", Objects.requireNonNull(ex.getMessage()));
                     ToastrConfig.mensaje(getContext(), "Error tipografico");
                 }
             }
 
             @Override
             public void onFailure(Call<RespuestaAsistencia> call, Throwable t) {
-                barcodeView.resume();
-                progressDialog.dismiss();
-                textViewError.setVisibility(View.VISIBLE);
-                linearLayoutResultados.setVisibility(View.GONE);
-                textViewSinResultado.setVisibility(View.GONE);
-                ToastrConfig.mensaje(getContext(), "Grave Error");
+                lastText = null;
+                resume();
+                dialogVerificando.dismiss();
+                ToastrConfig.mensaje(getContext(), "La peticion fallo.. vuelva a intentarlo");
             }
         });
     }
 
-    private void mensajeError(int code) {
+    private String mensajeError(int code) {
+        String mensaje = "";
         switch (code) {
             case 400:
-                ToastrConfig.mensaje(getContext(), "No Se Encontro La Jornada");
+                mensaje = "No se encontro la jornada.";
                 break;
             case 409:
-                ToastrConfig.mensaje(getContext(), "La Jornada No Existe");
+                mensaje = "La asistecia ya fue registrada.";
                 break;
             case 412:
-                ToastrConfig.mensaje(getContext(), "El Participante No se Encuentra Inscrito");
+                mensaje = "El participante no se encuentra inscrito.";
                 break;
             case 500:
-                ToastrConfig.mensaje(getContext(), "Qr Invalido");
+                mensaje = "El Qr es invalido.";
                 break;
         }
+        return mensaje;
     }
 }

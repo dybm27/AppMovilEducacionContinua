@@ -10,7 +10,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 public class GoogleSingInService {
 
-    private Context context;
     private static GoogleSignInClient mGoogleSignInClient;
 
     public static GoogleSignInClient getMGoogleSignInClient(Context context) {

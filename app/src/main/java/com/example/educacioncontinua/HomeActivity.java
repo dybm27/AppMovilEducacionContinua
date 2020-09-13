@@ -8,9 +8,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.MenuItem;
@@ -20,7 +23,6 @@ import com.example.educacioncontinua.config.GoogleSingInService;
 import com.example.educacioncontinua.config.ToastrConfig;
 import com.example.educacioncontinua.dagger.BaseApplication;
 import com.example.educacioncontinua.fragments.CursosFragment;
-import com.example.educacioncontinua.fragments.JornadasQrFragment;
 import com.example.educacioncontinua.interfaces.RetrofitApi;
 import com.example.educacioncontinua.models.Curso;
 import com.example.educacioncontinua.models.Usuario;
@@ -47,7 +49,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     private FragmentTransaction fragmentTransaction;
     private Fragment fragmentCursos;
-    private ProgressDialog progressDialog;
+    private Dialog dialog;
 
     private final int REQUEST_ACCESS_FINE = 0;
     @Inject
@@ -57,11 +59,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        setUpProgressDialog();
+        setUpDialog();
         //setUpBottomAppBar();
         setUpDagger();
         obtenerCursos();
         floatingActionButton = findViewById(R.id.floatActionButton);
+      //  floatingActionButton.setAlpha(0.25f);
         floatingActionButton.setOnClickListener(this);
     }
 
@@ -69,16 +72,13 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         ((BaseApplication) getApplication()).getRetrofitComponent().inject(this);
     }
 
-    private void setUpProgressDialog() {
-        progressDialog = new ProgressDialog(this);
-        //progressDialog.setIcon(R.mipmap.ic_launcher);
-        //progressDialog.setMessage("Cargando...");
-        progressDialog.show();
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
+    private void setUpDialog() {
+        dialog = new Dialog(this);
+        dialog.setContentView(R.layout.progress_bar);
+        Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
     }
 
     @Override
@@ -134,7 +134,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<List<Curso>>() {
             @Override
             public void onResponse(Call<List<Curso>> call, Response<List<Curso>> response) {
-                progressDialog.dismiss();
+                dialog.dismiss();
                 try {
                     if (response.isSuccessful()) {
                         abrirFragmento(response.body());
@@ -148,7 +148,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onFailure(Call<List<Curso>> call, Throwable t) {
-                progressDialog.dismiss();
+                dialog.dismiss();
                 mensajeError();
             }
         });

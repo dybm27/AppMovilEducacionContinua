@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.educacioncontinua.HomeActivity;
@@ -36,10 +37,11 @@ import retrofit2.Response;
 
 public class CursosFragment extends Fragment {
 
-    private TextView textViewNombre, textViewTipo;
+    private TextView textViewNombre, textViewTipo, textViewSinCursos;
     private List<Curso> cursos;
     private RecyclerView recyclerView;
     private CursoAdapter cursoAdapter;
+    private LinearLayout linearLayoutCursos;
     private SwipeRefreshLayout swipeContainer;
 
     @Inject
@@ -58,11 +60,21 @@ public class CursosFragment extends Fragment {
         assert datosRecuperados != null;
         cursos = datosRecuperados.getParcelableArrayList("cursos");
         setUpDagger();
-        setUpRecycler(view);
         setUpSwipe(view);
         setUpView(view);
-
+        setUpRecycler(view);
+        verificarCursos();
         return view;
+    }
+
+    private void verificarCursos() {
+        if (false) {
+            linearLayoutCursos.setVisibility(View.VISIBLE);
+            textViewSinCursos.setVisibility(View.GONE);
+        } else {
+            linearLayoutCursos.setVisibility(View.GONE);
+            textViewSinCursos.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setUpDagger() {
@@ -70,6 +82,8 @@ public class CursosFragment extends Fragment {
     }
 
     private void setUpView(View view) {
+        textViewSinCursos = view.findViewById(R.id.textViewSinCursos);
+        linearLayoutCursos = view.findViewById(R.id.linearLayoutCursos);
         textViewNombre = view.findViewById(R.id.textViewNombre);
         textViewTipo = view.findViewById(R.id.textViewTipo);
         String nombre = Usuario.getUsuario().getPrimerNombre() + " " + Usuario.getUsuario().getSegundoNombre()
@@ -126,11 +140,21 @@ public class CursosFragment extends Fragment {
                 swipeContainer.setRefreshing(false);
                 try {
                     if (response.isSuccessful()) {
-                        cursoAdapter.setData(response.body());
+                        assert response.body() != null;
+                        if (response.body().size() > 0) {
+                            linearLayoutCursos.setVisibility(View.VISIBLE);
+                            textViewSinCursos.setVisibility(View.GONE);
+                            cursoAdapter.setData(response.body());
+                        } else {
+                            linearLayoutCursos.setVisibility(View.GONE);
+                            textViewSinCursos.setVisibility(View.VISIBLE);
+                        }
                     } else {
+                        ocultarLinearLayout();
                         ToastrConfig.mensaje(getContext(), "Error server");
                     }
                 } catch (Exception ex) {
+                    ocultarLinearLayout();
                     ToastrConfig.mensaje(getContext(), "Error tipografico");
                 }
             }
@@ -138,8 +162,14 @@ public class CursosFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Curso>> call, Throwable t) {
                 ToastrConfig.mensaje(getContext(), "Grave Error");
+                ocultarLinearLayout();
                 swipeContainer.setRefreshing(false);
             }
         });
+    }
+
+    private void ocultarLinearLayout() {
+        linearLayoutCursos.setVisibility(View.GONE);
+        textViewSinCursos.setVisibility(View.VISIBLE);
     }
 }

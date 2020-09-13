@@ -108,7 +108,7 @@ public class CursoAdapter extends RecyclerView.Adapter<CursoAdapter.CursoAdapter
                     .addToBackStack(null)
                     .commit();
         } else {
-            ToastrConfig.mensaje(context, "No hay Jornadas Disponibles");
+            ToastrConfig.mensaje(context, "No hay jornadas disponibles.");
         }
     }
 }

@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         app:backgroundTint="@color/colorBtnFlotante"
         app:layout_anchor="@id/bottomAppBar"
+        app:rippleColor="@color/colorPrimary"
         app:srcCompat="@drawable/ic_baseline_power_settings_new_24_white" />
 
 

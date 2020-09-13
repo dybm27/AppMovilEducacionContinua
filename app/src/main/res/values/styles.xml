@@ -8,4 +8,18 @@
 
         <item name="android:windowContentTransitions">true</item>
     </style>
+
+    <style name="text1Modal">
+        <item name="android:fontFamily">@font/coming_soon</item>
+        <item name="android:textColor">@color/colorBtnFlotante</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text2Modal">
+        <item name="android:fontFamily">@font/coming_soon</item>
+        <item name="android:textColor">#000</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textStyle">italic</item>
+    </style>
 </resources>

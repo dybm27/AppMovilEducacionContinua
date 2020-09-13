@@ -17,5 +17,15 @@
     <string name="titulo">CURSOS Y EVENTOS DE EDUCACIÓN CONTINUA UFPS</string>
     <string name="btn_google">Iniciar Sesión</string>
     <string name="verificando">Verificando...</string>
-    <string name="tituloCursos">BIENVENIDO/A.. LISTA DE EVENTOS Y CURSOS DISPONIBLES</string>
+    <string name="tituloCursos">LISTA DE EVENTOS Y CURSOS DISPONIBLES</string>
+    <string name="logo_app">Logo App</string>
+    <string name="dise_o_top">diseño top</string>
+    <string name="dise_o_bot">diseño bot</string>
+    <string name="logo_ufps">Logo Ufps</string>
+    <string name="nombre">"Nombre: "</string>
+    <string name="tipo_de_participante">"Tipo de Participante: "</string>
+    <string name="documento">"Documento: "</string>
+    <string name="datos_del_paticipante">Datos del paticipante</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="sin_cursos">No tiene asignados cursos y/o eventos de educación continua \'en desarrollo\' para la toma de asistencia.</string>
 </resources>

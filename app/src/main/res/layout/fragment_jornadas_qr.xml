@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/jornadasFragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingBottom="100dp">
+
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardTextLayout"
@@ -16,12 +19,18 @@
         android:layout_centerHorizontal="true"
         android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
         android:padding="10dp"
         app:cardCornerRadius="5dp"
-        app:cardElevation="4dp">
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/cardBarcodeView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,7 +43,7 @@
                 android:id="@+id/textViewTitulo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/aclonica"
+                android:textAppearance="?attr/textAppearanceHeadline6"
                 android:text="Nombre Evento"
                 android:textAlignment="center"
                 android:textColor="@color/colorPrimary"
@@ -43,7 +52,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/textInputJordana"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-                android:layout_width="250dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:hint="@string/jornadas"
                 app:boxCornerRadiusBottomEnd="5dp"
@@ -63,23 +72,28 @@
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardBarcodeView"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="0dp"
         android:layout_below="@+id/cardTextLayout"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_centerHorizontal="true"
         android:layout_marginHorizontal="8dp"
         android:layout_marginVertical="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="-70dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="40dp"
         android:padding="10dp"
         app:cardCornerRadius="5dp"
-        app:cardElevation="4dp">
+        app:cardElevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardTextLayout">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -90,7 +104,7 @@
             <com.journeyapps.barcodescanner.DecoratedBarcodeView
                 android:id="@+id/barcode_scanner"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="match_parent"
                 android:layout_margin="5dp"
                 android:visibility="gone" />
 
@@ -105,109 +119,9 @@
                 android:layout_marginTop="0dp"
                 android:text="@string/mensajeSinPermiso"
                 android:textAlignment="center"
+                style="@style/text1Modal"
                 android:textSize="20sp" />
         </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>
-
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardResultados"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/cardBarcodeView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginVertical="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="-70dp"
-        android:layout_marginEnd="8dp"
-        android:padding="10dp"
-        app:cardCornerRadius="5dp"
-        app:cardElevation="4dp">
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/linearLayoutResultados"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Nombre:" />
-
-                <TextView
-                    android:id="@+id/textViewNombre"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Tipo Participante:" />
-
-                <TextView
-                    android:id="@+id/textViewTipoParticipante"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Documento:" />
-
-                <TextView
-                    android:id="@+id/textViewDocumento"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <TextView
-            android:id="@+id/textViewError"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="Error!!"
-            android:textAlignment="center"
-            android:textSize="20dp"
-            android:visibility="gone" />
-
-
-        <TextView
-            android:id="@+id/textViewSinResultados"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:text="Sin Resultados"
-            android:textAlignment="center"
-            android:textSize="20dp" />
-
-    </com.google.android.material.card.MaterialCardView>
-
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
