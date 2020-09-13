@@ -41,7 +41,6 @@ public class CursosFragment extends Fragment {
     private List<Curso> cursos;
     private RecyclerView recyclerView;
     private CursoAdapter cursoAdapter;
-    private LinearLayout linearLayoutCursos;
     private SwipeRefreshLayout swipeContainer;
 
     @Inject
@@ -68,11 +67,11 @@ public class CursosFragment extends Fragment {
     }
 
     private void verificarCursos() {
-        if (false) {
-            linearLayoutCursos.setVisibility(View.VISIBLE);
+        if (cursos.size() > 0) {
+            recyclerView.setVisibility(View.VISIBLE);
             textViewSinCursos.setVisibility(View.GONE);
         } else {
-            linearLayoutCursos.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
             textViewSinCursos.setVisibility(View.VISIBLE);
         }
     }
@@ -82,8 +81,8 @@ public class CursosFragment extends Fragment {
     }
 
     private void setUpView(View view) {
+        recyclerView = view.findViewById(R.id.recyclerViewCurso);
         textViewSinCursos = view.findViewById(R.id.textViewSinCursos);
-        linearLayoutCursos = view.findViewById(R.id.linearLayoutCursos);
         textViewNombre = view.findViewById(R.id.textViewNombre);
         textViewTipo = view.findViewById(R.id.textViewTipo);
         String nombre = Usuario.getUsuario().getPrimerNombre() + " " + Usuario.getUsuario().getSegundoNombre()
@@ -111,7 +110,6 @@ public class CursosFragment extends Fragment {
 
     private void setUpRecycler(View view) {
         cursoAdapter = new CursoAdapter(getContext(), cursos);
-        recyclerView = view.findViewById(R.id.recyclerViewCurso);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -142,11 +140,11 @@ public class CursosFragment extends Fragment {
                     if (response.isSuccessful()) {
                         assert response.body() != null;
                         if (response.body().size() > 0) {
-                            linearLayoutCursos.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.VISIBLE);
                             textViewSinCursos.setVisibility(View.GONE);
                             cursoAdapter.setData(response.body());
                         } else {
-                            linearLayoutCursos.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.GONE);
                             textViewSinCursos.setVisibility(View.VISIBLE);
                         }
                     } else {
@@ -169,7 +167,7 @@ public class CursosFragment extends Fragment {
     }
 
     private void ocultarLinearLayout() {
-        linearLayoutCursos.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
         textViewSinCursos.setVisibility(View.VISIBLE);
     }
 }
