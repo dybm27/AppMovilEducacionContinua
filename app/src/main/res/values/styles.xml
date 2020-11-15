@@ -22,4 +22,10 @@
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">italic</item>
     </style>
+
+    <style name="dropdown.material" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="boxStrokeWidth">1.5dp</item>
+    </style>
+
 </resources>
