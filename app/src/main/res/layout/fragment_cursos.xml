@@ -9,49 +9,54 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        android:paddingBottom="50dp">
+        android:paddingBottom="100dp">
         <!-- Contenido scrollable   -->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="7dp">
+            android:orientation="vertical">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardTextLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:padding="10dp"
+               android:layout_margin="10dp"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:orientation="vertical"
-                    android:padding="5dp">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/borde_color_primary"
+                    android:orientation="vertical">
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:text="@string/tituloCursos"
-                        android:textAlignment="center"
-                        android:textAppearance="?attr/textAppearanceHeadline6"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="20sp" />
+                        android:background="@drawable/background_titulo_color_primary"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:padding="5dp"
+                        android:radius="5dp">
 
-                    <TableRow
-                        android:id="@+id/hr"
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="#444" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/aclonica"
+                            android:text="@string/tituloCursos"
+                            android:textAlignment="center"
+                            android:textAllCaps="true"
+                            android:textColor="#fff"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
 
                     <TextView
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:id="@+id/textViewNombre"
                         style="@style/text2Modal"
                         android:layout_width="wrap_content"
@@ -60,6 +65,8 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
                         android:id="@+id/textViewTipo"
                         style="@style/text1Modal"
                         android:layout_width="match_parent"
@@ -67,7 +74,9 @@
                         android:text="TextView"
                         android:textAlignment="center"
                         android:textSize="16sp" />
+
                 </LinearLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
             <androidx.recyclerview.widget.RecyclerView

@@ -159,7 +159,7 @@ public class CursosFragment extends Fragment {
 
             @Override
             public void onFailure(Call<List<Curso>> call, Throwable t) {
-                ToastrConfig.mensaje(getContext(), "Grave Error");
+                ToastrConfig.mensaje(getContext(), "Grave error");
                 ocultarLinearLayout();
                 swipeContainer.setRefreshing(false);
             }

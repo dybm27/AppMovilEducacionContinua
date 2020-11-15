@@ -156,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements
                                 ToastrConfig.mensaje(MainActivity.this, "No te encuentras registrado/a");
                                 break;
                             case 401:
-                                ToastrConfig.mensaje(MainActivity.this, "Su Token de validación no es valido");
+                                ToastrConfig.mensaje(MainActivity.this, "Su token de validación no es valido");
                                 break;
                         }
                     }
@@ -166,6 +166,12 @@ public class MainActivity extends AppCompatActivity implements
     public void abrirActivityHome() {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         finish();
     }
 }

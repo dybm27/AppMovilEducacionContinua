@@ -22,6 +22,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.educacioncontinua.R;
@@ -63,7 +66,6 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
     private String qr;
     private AutoCompleteTextView editTextFilledExposedDropdown;
     private Dialog dialogVerificando;
-    private LinearLayoutCompat linearLayoutResultados;
 
     // modal exito
     private TextView textViewNombre, textViewTipo, textViewDocumento;

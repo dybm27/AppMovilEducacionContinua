@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Educación Continua</string>
-    <string name="server_client_id_debug">835770905354-89itpo5t6vfvtrmfltvmfj1765vlr1va.apps.googleusercontent.com</string>
+    <string name="server_client_id_debug">523301986974-2q83ub9lbj1h26ufgde12bul6fqndaid.apps.googleusercontent.com</string>
     <string name="server_client_id_produccion">523301986974-4rbb6gu192148lg5poe9ofi0fnivbi0f.apps.googleusercontent.com</string>
     <string name="search">Buscar</string>
     <string name="content_description_search">buscar...</string>
