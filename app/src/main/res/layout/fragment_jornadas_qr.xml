@@ -53,7 +53,7 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputJordana"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+                    style="@style/dropdown.material"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -113,108 +113,6 @@
             </RelativeLayout>
 
         </com.google.android.material.card.MaterialCardView>
-
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardResultados"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:padding="10dp"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="4dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/borde_color_primary"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:id="@+id/linearLayoutResultados"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:orientation="vertical"
-                    android:padding="5dp"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Nombre:" />
-
-                        <TextView
-                            android:id="@+id/textViewNombre"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Tipo Participante:" />
-
-                        <TextView
-                            android:id="@+id/textViewTipoParticipante"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Documento:" />
-
-                        <TextView
-                            android:id="@+id/textViewDocumento"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textViewError"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Error!!"
-                    android:textAlignment="center"
-                    android:textSize="20dp"
-                    android:visibility="gone" />
-
-
-                <TextView
-                    android:id="@+id/textViewSinResultados"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Sin Resultados"
-                    android:textAlignment="center"
-                    android:textSize="20dp" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

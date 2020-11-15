@@ -60,17 +60,15 @@ public class MainActivity extends AppCompatActivity implements
         bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation_login);
 
         setUpDagger();
-        //diseñoTop = findViewById(R.id.imageViewDiseñoLoginTop);
-        //diseñoBot = findViewById(R.id.imageViewDiseñoLoginBottom);
+        diseñoTop = findViewById(R.id.imageViewDiseñoLoginTop);
+        diseñoBot = findViewById(R.id.imageViewDiseñoLoginBottom);
         signInButton = findViewById(R.id.sign_in_button);
-        // signInButton.setSize(SignInButton.SIZE_STANDARD);
         signInButton.setOnClickListener(this);
 
-        //diseñoTop.setAnimation(topAnimation);
-        //diseñoBot.setAnimation(bottomAnimation);
+        diseñoTop.setAnimation(topAnimation);
+        diseñoBot.setAnimation(bottomAnimation);
 
     }
-
 
 
     private void setUpDagger() {

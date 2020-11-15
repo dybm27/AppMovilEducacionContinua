@@ -43,6 +43,8 @@ public class SplashActivity extends AppCompatActivity {
     private ImageView logoApp, logoUfps;
     private TextView titulo;
 
+    private Handler handler;
+    private Runnable runnable;
     @Inject
     RetrofitApi retrofitApi;
 
@@ -107,7 +109,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void continuarSplash() {
-        new Handler().postDelayed(new Runnable() {
+        handler = new Handler();
+        runnable = new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
@@ -117,9 +120,9 @@ public class SplashActivity extends AppCompatActivity {
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this, pairs);
                 startActivity(intent, options.toBundle());
                 finish();
-
             }
-        }, SPLASH_SCREEN);
+        };
+        handler.postDelayed(runnable, SPLASH_SCREEN);
     }
 
     private void revokeAccess() {
@@ -135,6 +138,15 @@ public class SplashActivity extends AppCompatActivity {
     public void abrirActivityHome() {
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (runnable != null) {
+            handler.removeCallbacks(runnable);
+        }
         finish();
     }
 }

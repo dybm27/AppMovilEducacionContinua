@@ -75,6 +75,8 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
     private Button btnModalError;
     private AlertDialog modalExito, modalError;
 
+    private boolean isModal;
+
     @Inject
     RetrofitApi retrofitApi;
 
@@ -141,12 +143,14 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
             @Override
             public void onClick(View view) {
                 modalExito.dismiss();
+                isModal = false;
                 resume();
             }
         });
     }
 
     private void abrirModalExito(RespuestaAsistencia respuestaAsistencia) {
+        isModal = true;
         modalExito.show();
         SpannableString text1 = new SpannableString(respuestaAsistencia.getNombre());
         text1.setSpan(new UnderlineSpan(), 0, text1.length(), 0);
@@ -175,12 +179,14 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
             @Override
             public void onClick(View view) {
                 modalError.dismiss();
+                isModal = false;
                 resume();
             }
         });
     }
 
     private void abrirModalError(String mensajeError) {
+        isModal = true;
         modalError.show();
         textViewError.setText(mensajeError);
     }
@@ -242,6 +248,7 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
                 beepManager.playBeepSoundAndVibrate();
                 if (lastText != null) {
                     if (lastText.equals(result.getText())) {
+                        pause();
                         abrirModalError("El Qr ya fue leído con éxito");
                         return;
                     }
@@ -261,13 +268,17 @@ public class JornadasQrFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public void onResume() {
         super.onResume();
-        resume();
+        if (!isModal) {
+            resume();
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        pause();
+        if (!isModal) {
+            pause();
+        }
     }
 
     public void pause() {
