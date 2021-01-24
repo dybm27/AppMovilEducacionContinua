@@ -6,84 +6,66 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ImageView
+        android:id="@+id/iv_logo_ufps"
+        android:layout_width="140dp"
+        android:layout_height="100dp"
+        android:src="@drawable/logo_vertical_sin_fondo"
+        android:transitionName="logo_splash"
+        app:layout_constraintBottom_toTopOf="@+id/iv_logo_login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.58000004" />
+
 
     <ImageView
-        android:id="@+id/imageViewLogoAppLogin"
-        android:layout_width="wrap_content"
+        android:id="@+id/iv_logo_login"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="100dp"
-        android:rotation="-24"
-        android:rotationX="22"
-        android:rotationY="22"
-        android:src="@drawable/logo_cedcufps_login"
-        android:transitionName="logo_splash"
+        android:src="@drawable/logo_qr_medio"
+        app:layout_constraintBottom_toTopOf="@+id/sign_in_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.8" />
+
+    <ImageView
+        android:id="@+id/iv_login_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:src="@drawable/login_top"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageViewDiseñoLoginTop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:src="@drawable/img_top"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-        android:id="@+id/imageViewDiseñoLoginBottom"
-        android:layout_width="wrap_content"
+        android:id="@+id/iv_login_buttom"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/img_bot"
+        android:adjustViewBounds="true"
+        android:src="@drawable/login_buttom"
+        android:transitionName="buttom_splash"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewTitulo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageViewDiseñoLoginBottom"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:fontFamily="@font/bungee_shade"
-        android:rotation="-24"
-        android:text="@string/titulo"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:textColor="@color/colorBtnFlotante"
-        android:textSize="30sp"
-        android:transitionName="text_splash"
-        app:layout_constraintBottom_toTopOf="@+id/imageViewDiseñoLoginBottom"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewLogoAppLogin"
-        app:layout_constraintVertical_bias="0.489"
-        tools:layout_editor_absoluteX="0dp" />
-
     <com.shobhitpuri.custombuttons.GoogleSignInButton
         android:id="@+id/sign_in_button"
-        android:layout_width="180dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginStart="70dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
-        android:rotation="-24"
+        android:layout_marginBottom="50dp"
         android:text="@string/btn_google"
         app:isDarkTheme="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/iv_login_buttom"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/imageViewDiseñoLoginBottom"
-        app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 

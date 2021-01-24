@@ -4,30 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.educacioncontinua.config.GoogleSingInService;
 import com.example.educacioncontinua.config.ToastrConfig;
 import com.example.educacioncontinua.dagger.BaseApplication;
 import com.example.educacioncontinua.interfaces.RetrofitApi;
-import com.example.educacioncontinua.models.RespuestaAsistencia;
 import com.example.educacioncontinua.models.Usuario;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -44,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements
     private static final String TAG = "SignInActivity";
     private static final int RC_SIGN_IN = 9001;
     private GoogleSignInButton signInButton;
-    private ImageView diseñoTop, diseñoBot;
-    private Animation topAnimation, bottomAnimation, lestAnimation;
 
     @Inject
     RetrofitApi retrofitApi;
@@ -55,18 +45,11 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
-        //Animations
-        topAnimation = AnimationUtils.loadAnimation(this, R.anim.top_animation_login);
-        bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation_login);
+
 
         setUpDagger();
-        diseñoTop = findViewById(R.id.imageViewDiseñoLoginTop);
-        diseñoBot = findViewById(R.id.imageViewDiseñoLoginBottom);
         signInButton = findViewById(R.id.sign_in_button);
         signInButton.setOnClickListener(this);
-
-        diseñoTop.setAnimation(topAnimation);
-        diseñoBot.setAnimation(bottomAnimation);
 
     }
 

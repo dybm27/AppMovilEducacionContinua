@@ -4,9 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,10 +14,8 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.educacioncontinua.config.GoogleSingInService;
-import com.example.educacioncontinua.config.ToastrConfig;
 import com.example.educacioncontinua.dagger.BaseApplication;
 import com.example.educacioncontinua.interfaces.RetrofitApi;
 import com.example.educacioncontinua.models.Usuario;
@@ -40,8 +36,7 @@ public class SplashActivity extends AppCompatActivity {
 
     //variables
     private Animation topAnimation, bottomAnimation, lestAnimation;
-    private ImageView logoApp, logoUfps;
-    private TextView titulo;
+    private ImageView buttomSplash, logoUfps;
 
     private Handler handler;
     private Runnable runnable;
@@ -59,13 +54,11 @@ public class SplashActivity extends AppCompatActivity {
         bottomAnimation = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
         lestAnimation = AnimationUtils.loadAnimation(this, R.anim.left_animation);
 
-        logoApp = findViewById(R.id.imageViewLogoApp);
-        logoUfps = findViewById(R.id.imageViewLogoUfps);
-        titulo = findViewById(R.id.textViewTitulo);
+        buttomSplash = findViewById(R.id.iv_splash_buttom);
+        logoUfps = findViewById(R.id.iv_logo_ufps);
 
-        logoApp.setAnimation(topAnimation);
+        buttomSplash.setAnimation(topAnimation);
         logoUfps.setAnimation(lestAnimation);
-        titulo.setAnimation(bottomAnimation);
     }
 
     private void setUpDagger() {
@@ -115,8 +108,8 @@ public class SplashActivity extends AppCompatActivity {
             public void run() {
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 Pair[] pairs = new Pair[2];
-                pairs[0] = new Pair<View, String>(logoApp, "logo_splash");
-                pairs[1] = new Pair<View, String>(titulo, "text_splash");
+                pairs[0] = new Pair<View, String>(logoUfps, "logo_splash");
+                pairs[1] = new Pair<View, String>(buttomSplash, "buttom_splash");
                 ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(SplashActivity.this, pairs);
                 startActivity(intent, options.toBundle());
                 finish();
