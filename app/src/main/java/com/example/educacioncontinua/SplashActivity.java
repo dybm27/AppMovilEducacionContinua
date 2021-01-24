@@ -57,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
         buttomSplash = findViewById(R.id.iv_splash_buttom);
         logoUfps = findViewById(R.id.iv_logo_ufps);
 
-        buttomSplash.setAnimation(topAnimation);
+        buttomSplash.setAnimation(bottomAnimation);
         logoUfps.setAnimation(lestAnimation);
     }
 

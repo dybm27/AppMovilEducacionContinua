@@ -8,9 +8,10 @@
     android:orientation="vertical"
     tools:context=".SplashActivity">
 
+
     <ImageView
         android:id="@+id/iv_logo_ufps"
-        android:layout_width="match_parent"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:src="@drawable/logo_vertical_sin_fondo"
         android:transitionName="logo_splash"
@@ -18,7 +19,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <ImageView
         android:adjustViewBounds="true"
