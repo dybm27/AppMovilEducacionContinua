@@ -1,6 +1,7 @@
 package com.example.educacioncontinua.interfaces;
 
 import com.example.educacioncontinua.models.Curso;
+import com.example.educacioncontinua.models.Jornada;
 import com.example.educacioncontinua.models.RespuestaAsistencia;
 import com.example.educacioncontinua.models.Usuario;
 
@@ -16,6 +17,9 @@ public interface RetrofitApi {
 
     @GET("misCursosYEduContinua/{idUser}")
     Call<List<Curso>> obtenerCursos(@Path("idUser") int idUser);
+
+    @GET("jornadasEducacionContinua/{idEdu}")
+    Call<List<Jornada>> obtenerJornadas(@Path("idEdu") int idEdu);
 
     @GET("asistencia/{idEdu}/{idJornada}/{qr}")
     Call<RespuestaAsistencia> asistencia(@Path("idEdu") int idEdu, @Path("idJornada") int idJornada, @Path("qr") String qr);

@@ -3,15 +3,20 @@ package com.example.educacioncontinua.fragments;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,8 +25,10 @@ import com.example.educacioncontinua.R;
 import com.example.educacioncontinua.adapter.CursoAdapter;
 import com.example.educacioncontinua.config.ToastrConfig;
 import com.example.educacioncontinua.dagger.BaseApplication;
+import com.example.educacioncontinua.interfaces.CallbackJornadas;
 import com.example.educacioncontinua.interfaces.RetrofitApi;
 import com.example.educacioncontinua.models.Curso;
+import com.example.educacioncontinua.models.Jornada;
 import com.example.educacioncontinua.models.Usuario;
 
 import java.util.ArrayList;
@@ -38,10 +45,12 @@ import retrofit2.Response;
 public class CursosFragment extends Fragment {
 
     private TextView textViewNombre, textViewTipo, textViewSinCursos;
-    private List<Curso> cursos;
+    private List<Curso> cursos = new ArrayList<>();
     private RecyclerView recyclerView;
+    private HomeActivity homeActivity;
     private CursoAdapter cursoAdapter;
     private SwipeRefreshLayout swipeContainer;
+    private CallbackJornadas buscarJornadas = this::obtenerJornadas;
 
     @Inject
     RetrofitApi retrofitApi;
@@ -51,13 +60,30 @@ public class CursosFragment extends Fragment {
     }
 
     @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof HomeActivity) {
+            homeActivity = (HomeActivity) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        homeActivity = null;
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cursos, container, false);
         Bundle datosRecuperados = getArguments();
-        assert datosRecuperados != null;
-        cursos = datosRecuperados.getParcelableArrayList("cursos");
+        if (datosRecuperados != null)
+            cursos = datosRecuperados.getParcelableArrayList("cursos");
         setUpDagger();
         setUpSwipe(view);
         setUpView(view);
@@ -109,7 +135,7 @@ public class CursosFragment extends Fragment {
     }
 
     private void setUpRecycler(View view) {
-        cursoAdapter = new CursoAdapter(getContext(), cursos);
+        cursoAdapter = new CursoAdapter(homeActivity, cursos, buscarJornadas);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -169,5 +195,52 @@ public class CursosFragment extends Fragment {
     private void ocultarLinearLayout() {
         recyclerView.setVisibility(View.GONE);
         textViewSinCursos.setVisibility(View.VISIBLE);
+    }
+
+    private void abrirJornadas(List<Jornada> jornadas, int idContinua) {
+        Curso curso = obtenerCurso(idContinua);
+        if (jornadas.size() != 0) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelableArrayList("jornadas", (ArrayList<? extends Parcelable>) jornadas);
+            bundle.putInt("idEduContinua", curso.getId());
+            bundle.putString("nombreEvento", curso.getNombre());
+            JornadasQrFragment jornadasQrFragment = new JornadasQrFragment();
+            jornadasQrFragment.setArguments(bundle);
+            FragmentManager fragmentManager = homeActivity.getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.contenedorFragment, jornadasQrFragment)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            ToastrConfig.mensaje(getContext(), "No hay jornadas disponibles.");
+        }
+    }
+
+    private Curso obtenerCurso(int id) {
+        Curso curso = null;
+        for (Curso c : cursos) {
+            if (c.getId() == id) {
+                curso = c;
+            }
+        }
+        return curso;
+    }
+
+    private void obtenerJornadas(int idEdu) {
+        Call<List<Jornada>> call = retrofitApi.obtenerJornadas(idEdu);
+        call.enqueue(new Callback<List<Jornada>>() {
+            @Override
+            public void onResponse(Call<List<Jornada>> call, Response<List<Jornada>> response) {
+                try {
+                    abrirJornadas(response.body(), idEdu);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Jornada>> call, Throwable t) {
+            }
+        });
     }
 }
