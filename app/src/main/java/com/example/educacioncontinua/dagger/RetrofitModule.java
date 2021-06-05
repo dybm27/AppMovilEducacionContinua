@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class RetrofitModule {
-    private static final String URLBASE = "https://cedcufps.tk/app/";
+    private static final String URLBASE = "https://studentsprojects.cloud.ufps.edu.co/geduco/app/";
 
     @Singleton
     @Provides
