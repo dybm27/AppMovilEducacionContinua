@@ -57,7 +57,7 @@
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:hint="@string/jornadas"
+                    android:hint="@string/journeys"
                     app:boxCornerRadiusBottomEnd="5dp"
                     app:boxCornerRadiusBottomStart="5dp"
                     app:boxCornerRadiusTopEnd="5dp"

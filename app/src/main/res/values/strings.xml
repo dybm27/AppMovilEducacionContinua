@@ -10,7 +10,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_label">Buscar</string>
-    <string name="jornadas">Jornadas</string>
+    <string name="journeys">Jornadas</string>
     <string name="cargando">Cargando..</string>
     <string name="mensajeSinPermiso">Sin permiso de Camara. Este permiso es necesario para poder usar el lector QR</string>
     <string name="icon_date">Fecha</string>
@@ -28,4 +28,5 @@
     <string name="datos_del_paticipante">Datos del paticipante</string>
     <string name="aceptar">Aceptar</string>
     <string name="sin_cursos">No tiene asignados cursos y/o eventos de educación continua \'en desarrollo\' para la toma de asistencia.</string>
+    <string name="btn_floating">Floating action button</string>
 </resources>

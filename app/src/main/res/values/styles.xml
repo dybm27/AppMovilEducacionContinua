@@ -12,7 +12,7 @@
 
     <style name="text1Modal">
         <item name="android:fontFamily">@font/coming_soon</item>
-        <item name="android:textColor">@color/colorBtnFlotante</item>
+        <item name="android:textColor">@color/colorBtnFloating</item>
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
     </style>
