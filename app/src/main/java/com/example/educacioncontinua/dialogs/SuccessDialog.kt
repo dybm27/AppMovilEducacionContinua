@@ -23,9 +23,11 @@ class SuccessDialog : DialogFragment() {
     private val binding get() = _binding!!
 
     companion object {
+        private const val EXTRA_ASSISTANCE = "assistance"
+
         fun newInstance(assistanceResponse: AssistanceResponse): SuccessDialog =
             SuccessDialog().apply {
-                arguments = bundleOf("assistance" to assistanceResponse)
+                arguments = bundleOf(EXTRA_ASSISTANCE to assistanceResponse)
             }
     }
 
@@ -36,7 +38,7 @@ class SuccessDialog : DialogFragment() {
     ): View? {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         _binding = ModalJornadasExitoBinding.inflate(inflater, container, false)
-        savedInstanceState?.getParcelable<AssistanceResponse>("assistance")?.let { initView(it) }
+        arguments?.getParcelable<AssistanceResponse>(EXTRA_ASSISTANCE)?.let { initView(it) }
         return binding.root
     }
 

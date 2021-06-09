@@ -5,13 +5,13 @@ import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.educacioncontinua.MainActivity
 import com.example.educacioncontinua.R
@@ -62,14 +62,7 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
         journeys = args.journeys.toList()
         _binding = FragmentQrBinding.inflate(inflater, container, false)
         initView()
-        if (checkCameraPermission()) {
-            binding.textViewSinPermiso.visibility = View.GONE
-            binding.barcodeScanner.visibility = View.VISIBLE
-            initScanner()
-        } else {
-            binding.textViewSinPermiso.visibility = View.VISIBLE
-            binding.barcodeScanner.visibility = View.GONE
-        }
+        checkCameraPermission()
         fillAdapter()
         setUpDialogCheck()
         initFragmentResultListener()
@@ -118,21 +111,27 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
 
     private fun initView() {
         binding.textViewTitulo.text = course.name
+        binding.floatActionButton.setOnClickListener { mainActivity.signOut() }
     }
 
-    private fun checkCameraPermission(): Boolean =
-        ActivityCompat.checkSelfPermission(
-            mainActivity,
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-
-    private fun pause() {
-        binding.barcodeScanner.pause();
+    private fun checkCameraPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                mainActivity,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            binding.textViewSinPermiso.visibility = View.GONE
+            binding.barcodeScanner.visibility = View.VISIBLE
+            initScanner()
+        } else {
+            binding.textViewSinPermiso.visibility = View.VISIBLE
+            binding.barcodeScanner.visibility = View.GONE
+        }
     }
 
-    private fun resume() {
-        binding.barcodeScanner.resume();
-    }
+    private fun pause() = binding.barcodeScanner.pause()
+
+    private fun resume() = binding.barcodeScanner.resume()
 
     private fun checkAttendance(resultQr: String) {
         val call = retrofitApi.assistance(course.id, idJourney, resultQr)
@@ -146,7 +145,6 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
                     if (response.isSuccessful) {
                         lastText = resultQr
                         openSuccessDialog(response.body()!!)
-                        toast("Asistencia Registrada")
                     } else {
                         lastText = null
                         openErrorDialog(msgError(response.code()))
@@ -212,7 +210,7 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
 
     private fun getIds(selection: String) {
         journeys.forEach {
-            val value = "${it.dayDateString} -  ${it.startTimeString}"
+            val value = "${it.dayDateString} - ${it.startTimeString}"
             if (value == selection) {
                 idJourney = it.id
             }
