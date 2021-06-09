@@ -1,5 +1,6 @@
 package com.example.educacioncontinua.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +19,7 @@ import com.example.educacioncontinua.toast
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +33,6 @@ class LoginFragment : Fragment() {
 
     companion object {
         private const val TAG = "SignInActivity"
-        private const val RC_SIGN_IN = 9001
     }
 
     @Inject
@@ -48,7 +49,7 @@ class LoginFragment : Fragment() {
         super.onCreate(savedInstanceState)
         resultLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RC_SIGN_IN) {
+                if (result.resultCode == Activity.RESULT_OK) {
                     val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                     handleSignInResult(task)
                 }
@@ -60,11 +61,9 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
-
         binding.signInButton.setOnClickListener {
             signIn()
         }
-
         return binding.root
     }
 
@@ -75,9 +74,7 @@ class LoginFragment : Fragment() {
 
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
-            val account = completedTask.getResult(
-                ApiException::class.java
-            )
+            val account = completedTask.getResult(ApiException::class.java)
             verifyUser(account)
         } catch (e: ApiException) {
             Log.w(TAG, "signInResult:failed code=" + e.statusCode)

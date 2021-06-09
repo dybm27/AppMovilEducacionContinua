@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#840000</color>
     <color name="colorAccent">#e8e8e8</color>
     <color name="colorWhite">#ffff</color>
+    <color name="colorBlack">#000000</color>
     <color name="transparent">#00000000</color>
     <color name="colorBtnFloating">#818386</color>
 

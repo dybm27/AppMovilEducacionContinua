@@ -53,9 +53,9 @@ class HomeFragment : Fragment(), CallbackJourneys {
         initView()
         initRecycler()
         initSwipe()
-        verifyCourses()
+        checkCourses(courses)
         setUpDialogCharging()
-        //mainActivity.checkCameraPermission()
+        mainActivity.checkCameraPermission()
         getCourses()
         return binding.root
     }
@@ -99,14 +99,7 @@ class HomeFragment : Fragment(), CallbackJourneys {
                 binding.swipeContainer.isRefreshing = false
                 try {
                     if (response.isSuccessful) {
-                        if (response.body()?.isNotEmpty() == true) {
-                            binding.recyclerViewCurso.visibility = View.VISIBLE
-                            binding.textViewSinCursos.visibility = View.GONE
-                            adapter.setData(response.body()!!)
-                        } else {
-                            binding.recyclerViewCurso.visibility = View.GONE
-                            binding.textViewSinCursos.visibility = View.VISIBLE
-                        }
+                        checkCourses(response.body()!!)
                     } else {
                         hideLinearLayout();
                         toast("Error server")
@@ -152,16 +145,6 @@ class HomeFragment : Fragment(), CallbackJourneys {
         })
     }
 
-    private fun verifyCourses() {
-        if (courses.isNotEmpty()) {
-            binding.recyclerViewCurso.visibility = View.VISIBLE
-            binding.textViewSinCursos.visibility = View.GONE
-        } else {
-            binding.recyclerViewCurso.visibility = View.GONE
-            binding.textViewSinCursos.visibility = View.VISIBLE
-        }
-    }
-
     private fun verifyTypeUser(): String {
         if (user.administrative) {
             return "Administrativo"
@@ -203,8 +186,7 @@ class HomeFragment : Fragment(), CallbackJourneys {
                 dialog.dismiss();
                 try {
                     if (response.isSuccessful) {
-                        courses.clear()
-                        courses.addAll(response.body()!!)
+                        checkCourses(response.body()!!)
                     } else {
                         msgError()
                     }
@@ -219,6 +201,19 @@ class HomeFragment : Fragment(), CallbackJourneys {
             }
 
         });
+    }
+
+    private fun checkCourses(list: List<Course>) {
+        courses.clear()
+        if (list.isNotEmpty()) {
+            courses.addAll(list)
+            binding.recyclerViewCurso.visibility = View.VISIBLE
+            binding.textViewSinCursos.visibility = View.GONE
+        } else {
+            binding.recyclerViewCurso.visibility = View.GONE
+            binding.textViewSinCursos.visibility = View.VISIBLE
+        }
+        adapter.setData(courses)
     }
 
     private fun msgError() {

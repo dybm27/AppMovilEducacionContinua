@@ -12,13 +12,11 @@
         android:background="@color/colorAccent"
         tools:context=".HomeActivity">
 
-        <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingBottom="100dp">
+            android:paddingBottom="80dp">
 
             <LinearLayout
                 android:id="@+id/jornadasFragment"
@@ -38,7 +36,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/borde_color_primary"
-                        android:gravity="center"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -64,28 +61,37 @@
 
                         </LinearLayout>
 
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/textInputJordana"
-                            style="@style/dropdown.material"
-                            android:layout_width="250dp"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:hint="@string/journeys"
-                            app:boxCornerRadiusBottomEnd="5dp"
-                            app:boxCornerRadiusBottomStart="5dp"
-                            app:boxCornerRadiusTopEnd="5dp"
-                            app:boxCornerRadiusTopStart="5dp"
-                            app:startIconContentDescription="@string/icon_date"
-                            app:startIconDrawable="@drawable/ic_baseline_date_range_24">
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp">
 
-                            <AutoCompleteTextView
-                                android:id="@+id/filled_exposed_dropdown"
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/textInputJordana"
+                                style="@style/dropdown.material"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="none" />
+                                android:layout_margin="20dp"
+                                android:hint="@string/journeys"
+                                app:boxCornerRadiusBottomEnd="5dp"
+                                app:boxCornerRadiusBottomStart="5dp"
+                                app:boxCornerRadiusTopEnd="5dp"
+                                app:boxCornerRadiusTopStart="5dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:startIconContentDescription="@string/icon_date"
+                                app:startIconDrawable="@drawable/ic_baseline_date_range_24">
 
-                        </com.google.android.material.textfield.TextInputLayout>
+                                <AutoCompleteTextView
+                                    android:id="@+id/filled_exposed_dropdown"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="none" />
 
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
 
                 </com.google.android.material.card.MaterialCardView>

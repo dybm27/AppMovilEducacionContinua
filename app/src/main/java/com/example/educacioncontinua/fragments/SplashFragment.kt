@@ -31,7 +31,6 @@ class SplashFragment : Fragment() {
     private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!
     private lateinit var callback: OnBackPressedCallback
-    private lateinit var handler: Handler
 
     companion object {
         private const val SPLASH_SCREEN = 2000L
@@ -54,10 +53,6 @@ class SplashFragment : Fragment() {
         binding.ivSplashButtom.animation = bottomAnimation
         binding.ivLogoUfps.animation = lestAnimation
 
-        handler = Handler(Looper.getMainLooper())
-        handler.postDelayed({
-            findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
-        }, SPLASH_SCREEN)
         callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             println("Se desactiva el boton atras")
         }
@@ -77,36 +72,43 @@ class SplashFragment : Fragment() {
                 override fun onResponse(call: Call<User?>, response: Response<User?>) {
                     try {
                         if (response.isSuccessful) {
-                            openHome(response.body()!!)
+                            startSplash(response.body())
                         } else {
-                            revokeAccess(response.code())
+                            revokeAccess()
                         }
                     } catch (ex: Exception) {
-                        toast("Error en el Servidor")
+                        startSplash(null)
                     }
                 }
 
                 override fun onFailure(call: Call<User?>, t: Throwable) {
-                    toast("Error de conexión")
+                   startSplash(null)
                 }
             })
+        } else {
+            startSplash(null)
         }
     }
 
-    private fun revokeAccess(code: Int) {
+    private fun revokeAccess() {
         googleSignInClient.revokeAccess()
             .addOnCompleteListener(requireActivity()) {
-                when (code) {
-                    403 -> toast("No tienes los permisos necesarios para ingresar")
-                    500 -> toast("No te encuentras registrado/a")
-                    401 -> toast("Su token de validación no es valido")
-                }
+                startSplash(null)
             }
     }
 
-    fun openHome(user: User) {
-        handler.removeCallbacksAndMessages(null)
-        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment(user))
+    fun startSplash(user: User?) {
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (user != null) {
+                findNavController().navigate(
+                    SplashFragmentDirections.actionSplashFragmentToHomeFragment(
+                        user
+                    )
+                )
+            } else {
+                findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
+            }
+        }, SPLASH_SCREEN)
     }
 
     override fun onDestroyView() {

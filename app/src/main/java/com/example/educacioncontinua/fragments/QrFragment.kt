@@ -18,8 +18,6 @@ import com.example.educacioncontinua.R
 import com.example.educacioncontinua.databinding.FragmentQrBinding
 import com.example.educacioncontinua.dialogs.ErrorDialog
 import com.example.educacioncontinua.dialogs.SuccessDialog
-import com.example.educacioncontinua.interfaces.IErrorDialog
-import com.example.educacioncontinua.interfaces.ISuccessDialog
 import com.example.educacioncontinua.interfaces.RetrofitApi
 import com.example.educacioncontinua.models.AssistanceResponse
 import com.example.educacioncontinua.models.Course
@@ -35,7 +33,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class QrFragment : Fragment(), AdapterView.OnItemClickListener, ISuccessDialog, IErrorDialog {
+class QrFragment : Fragment(), AdapterView.OnItemClickListener {
 
     private var _binding: FragmentQrBinding? = null
     private val binding get() = _binding!!
@@ -51,6 +49,10 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener, ISuccessDialog, 
 
     @Inject
     lateinit var retrofitApi: RetrofitApi
+
+    companion object {
+        const val REQUEST_KEY = "qrFragment"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,7 +72,16 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener, ISuccessDialog, 
         }
         fillAdapter()
         setUpDialogCheck()
+        initFragmentResultListener()
         return binding.root
+    }
+
+    private fun initFragmentResultListener() {
+        childFragmentManager.setFragmentResultListener(REQUEST_KEY, this)
+        { _, _ ->
+            isModal = false
+            resume()
+        }
     }
 
     private fun initScanner() {
@@ -223,29 +234,15 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener, ISuccessDialog, 
         return dialog
     }
 
-    override fun onclick(dialog: SuccessDialog) {
-        dialog.dismiss()
-        isModal = false
-        resume()
-    }
-
-    override fun onclick(dialog: ErrorDialog) {
-        dialog.dismiss()
-        isModal = false
-        resume()
-    }
-
     private fun openSuccessDialog(assistanceResponse: AssistanceResponse) {
         isModal = true
-        val dialog = SuccessDialog.newInstance(assistanceResponse)
-        dialog.show(parentFragmentManager, "successDialog")
+        SuccessDialog.newInstance(assistanceResponse).show(childFragmentManager, "successDialog")
 
     }
 
     private fun openErrorDialog(msg: String) {
         isModal = true
-        val dialog = ErrorDialog.newInstance(msg)
-        dialog.show(parentFragmentManager, "errorDialog")
+        ErrorDialog.newInstance(msg).show(childFragmentManager, "errorDialog")
     }
 
 }

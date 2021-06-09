@@ -22,7 +22,5 @@ data class Course(
     @SerializedName("programaResponsable")
     val responsibleProgram: String,
     @SerializedName("docenteResponsable")
-    val responsibleProfessor: String,
-    @SerializedName("jornadas")
-    val journeys: List<WorkingDay>
+    val responsibleProfessor: String
 ) : Parcelable

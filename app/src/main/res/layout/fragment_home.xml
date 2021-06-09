@@ -9,8 +9,7 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorAccent"
-        tools:context=".HomeActivity">
+        android:background="@color/colorAccent">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeContainer"
@@ -21,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingBottom="100dp">
+                android:paddingBottom="80dp">
                 <!-- Contenido scrollable   -->
 
                 <LinearLayout
@@ -67,22 +66,22 @@
                             </LinearLayout>
 
                             <TextView
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginRight="5dp"
                                 android:id="@+id/textViewNombre"
                                 style="@style/text2Modal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
                                 android:text="TextView"
                                 android:textSize="16sp" />
 
                             <TextView
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginRight="5dp"
                                 android:id="@+id/textViewTipo"
                                 style="@style/text1Modal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginRight="5dp"
                                 android:text="TextView"
                                 android:textAlignment="center"
                                 android:textSize="16sp" />

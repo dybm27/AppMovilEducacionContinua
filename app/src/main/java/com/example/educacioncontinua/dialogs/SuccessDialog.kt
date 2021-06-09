@@ -1,34 +1,32 @@
 package com.example.educacioncontinua.dialogs
 
 import android.app.Dialog
-import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.SpannableString
+import android.text.Spanned
 import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.example.educacioncontinua.databinding.ModalJornadasExitoBinding
-import com.example.educacioncontinua.interfaces.ISuccessDialog
+import com.example.educacioncontinua.fragments.QrFragment
 import com.example.educacioncontinua.models.AssistanceResponse
 
 class SuccessDialog : DialogFragment() {
 
     private var _binding: ModalJornadasExitoBinding? = null
     private val binding get() = _binding!!
-    private lateinit var listener: ISuccessDialog
 
     companion object {
-        fun newInstance(assistanceResponse: AssistanceResponse): SuccessDialog {
-            val dialog = SuccessDialog()
-            val arg = Bundle()
-            arg.putParcelable("assistance", assistanceResponse)
-            dialog.arguments = arg
-            return dialog
-        }
+        fun newInstance(assistanceResponse: AssistanceResponse): SuccessDialog =
+            SuccessDialog().apply {
+                arguments = bundleOf("assistance" to assistanceResponse)
+            }
     }
 
     override fun onCreateView(
@@ -58,16 +56,13 @@ class SuccessDialog : DialogFragment() {
             val text3 = SpannableString(assistanceResponse.document)
             text3.setSpan(UnderlineSpan(), 0, text3.length, 0)
             textViewDocumentoModal.text = text3
-            btnModalExito.setOnClickListener { listener.onclick(this@SuccessDialog) }
-        }
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        try {
-            listener = context as ISuccessDialog
-        } catch (e: ClassCastException) {
-            throw ClassCastException("$context must implement mainFragmentCallback")
+            btnModalExito.setOnClickListener {
+                dismiss()
+                setFragmentResult(
+                    QrFragment.REQUEST_KEY,
+                    bundleOf()
+                )
+            }
         }
     }
 

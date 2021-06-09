@@ -35,7 +35,11 @@ class MainActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        hideSystemUI()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) hideSystemUI()
     }
 
     private fun hideSystemUI() {
@@ -59,7 +63,7 @@ class MainActivity : AppCompatActivity() {
     fun signOut() {
         googleSignInClient.signOut()
             .addOnCompleteListener(this) {
-                findNavController(R.id.nav_graph).navigate(R.id.loginFragment)
+                findNavController(R.id.fragmentContainerView).navigate(R.id.loginFragment)
             }
     }
 
@@ -85,9 +89,9 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_ACCESS_FINE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                toast("Permiso de Camara Aceptado")
+                toast("Permiso de camara aceptado")
             } else {
-                toast("Permiso de Camara Denegado")
+                toast("Permiso de camara denegado")
             }
         }
     }
