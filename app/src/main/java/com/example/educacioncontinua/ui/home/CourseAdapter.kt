@@ -1,4 +1,4 @@
-package com.example.educacioncontinua.adapter
+package com.example.educacioncontinua.ui.home
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,13 +8,12 @@ import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educacioncontinua.R
 import com.example.educacioncontinua.databinding.CardCourseItemBinding
-import com.example.educacioncontinua.interfaces.CallbackJourneys
-import com.example.educacioncontinua.models.Course
+import com.example.educacioncontinua.model.data.Course
 
 class CourseAdapter(
     private val context: Context,
     private var courses: List<Course>,
-    val callbackJourneys: CallbackJourneys
+    val callbackWorkingDay: CallbackWorkingDay
 ) :
     RecyclerView.Adapter<CourseAdapter.CourseViewHolder>() {
 
@@ -46,7 +45,7 @@ class CourseAdapter(
                 imgView.setOnClickListener {
                     val animation = AnimationUtils.loadAnimation(context, R.anim.alpha)
                     it.startAnimation(animation)
-                    callbackJourneys.getJourneys(course.id)
+                    callbackWorkingDay.getWorkingDay(course.id)
                 }
             }
         }

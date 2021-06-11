@@ -1,4 +1,4 @@
-package com.example.educacioncontinua.fragments
+package com.example.educacioncontinua.ui.login
 
 import android.app.Activity
 import android.content.Intent
@@ -7,19 +7,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResult
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.educacioncontinua.databinding.FragmentLoginBinding
-import com.example.educacioncontinua.interfaces.RetrofitApi
-import com.example.educacioncontinua.models.User
+import com.example.educacioncontinua.model.RetrofitApi
+import com.example.educacioncontinua.model.data.User
 import com.example.educacioncontinua.toast
+import com.example.educacioncontinua.ui.dialogs.LogoutDialog
+import com.example.educacioncontinua.viewmodel.DataViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.common.SignInButton
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,6 +48,7 @@ class LoginFragment : Fragment() {
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+    private val model: DataViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +57,8 @@ class LoginFragment : Fragment() {
                 if (result.resultCode == Activity.RESULT_OK) {
                     val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                     handleSignInResult(task)
+                } else {
+                    binding.signInButton.isEnabled = true
                 }
             }
     }
@@ -62,8 +69,10 @@ class LoginFragment : Fragment() {
     ): View? {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         binding.signInButton.setOnClickListener {
+            it.isEnabled = false
             signIn()
         }
+        initObserver()
         return binding.root
     }
 
@@ -84,39 +93,40 @@ class LoginFragment : Fragment() {
 
     private fun verifyUser(account: GoogleSignInAccount?) {
         if (account != null) {
-            val call = retrofitApi.verifyUser(account.idToken)
-            call.enqueue(object : Callback<User?> {
-                override fun onResponse(call: Call<User?>, response: Response<User?>) {
-                    try {
-                        if (response.isSuccessful) {
-                            openHome(response.body()!!)
-                        } else {
-                            revokeAccess(response.code())
-                        }
-                    } catch (ex: Exception) {
-                        toast("Error en el Servidor")
-                    }
-                }
-
-                override fun onFailure(call: Call<User?>, t: Throwable) {
-                    toast("Error de conexión")
-                }
-            })
+            model.verifyUser(account.idToken)
+        } else {
+            binding.signInButton.isEnabled = true
+            toast("Hubo un fallo al intentar iniciar sesion, comunicate con el administrador")
         }
     }
 
-    private fun revokeAccess(code: Int) {
-        googleSignInClient.revokeAccess()
-            .addOnCompleteListener(requireActivity()) {
-                when (code) {
-                    403 -> toast("No tienes los permisos necesarios para ingresar")
-                    500 -> toast("No te encuentras registrado/a")
-                    401 -> toast("Su token de validación no es valido")
-                }
+    private fun initObserver() {
+        model.getUser().observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let { user ->
+                findNavController().navigate(
+                    LoginFragmentDirections.actionLoginFragmentToHomeFragment(
+                        user
+                    )
+                )
             }
+        })
+        model.getMessage().observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let { msg ->
+                googleSignInClient.revokeAccess()
+                    .addOnCompleteListener(requireActivity()) {
+                        toast(msg)
+                    }
+            }
+        })
+        model.isLoading().observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let { isLoading ->
+                binding.signInButton.isEnabled = !isLoading
+            }
+        })
     }
 
-    fun openHome(user: User) {
-        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment(user))
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

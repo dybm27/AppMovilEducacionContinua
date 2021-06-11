@@ -8,23 +8,17 @@ import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.DialogFragment
-import androidx.navigation.findNavController
 import com.example.educacioncontinua.databinding.ActivityMainBinding
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-
-    @Inject
-    lateinit var googleSignInClient: GoogleSignInClient
 
     companion object {
         const val REQUEST_ACCESS_FINE = 12
@@ -60,13 +54,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun signOut() {
-        googleSignInClient.signOut()
-            .addOnCompleteListener(this) {
-                findNavController(R.id.fragmentContainerView).navigate(R.id.loginFragment)
-            }
-    }
-
     fun checkCameraPermission() {
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -96,5 +83,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    fun setUpDialogCharging(msg: String): Dialog {
+        val dialog = Dialog(this)
+        dialog.setContentView(R.layout.dialog_progress)
+        dialog.findViewById<TextView>(R.id.textViewDialogProgressTitle).text = msg
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
+        dialog.setCanceledOnTouchOutside(false)
+        return dialog
+    }
 }

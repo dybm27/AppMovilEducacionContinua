@@ -1,4 +1,4 @@
-package com.example.educacioncontinua.fragments
+package com.example.educacioncontinua.ui.qr
 
 import android.Manifest
 import android.app.Dialog
@@ -12,24 +12,23 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.example.educacioncontinua.MainActivity
 import com.example.educacioncontinua.R
 import com.example.educacioncontinua.databinding.FragmentQrBinding
-import com.example.educacioncontinua.dialogs.ErrorDialog
-import com.example.educacioncontinua.dialogs.SuccessDialog
-import com.example.educacioncontinua.interfaces.RetrofitApi
-import com.example.educacioncontinua.models.AssistanceResponse
-import com.example.educacioncontinua.models.Course
-import com.example.educacioncontinua.models.WorkingDay
-import com.example.educacioncontinua.toast
+import com.example.educacioncontinua.ui.dialogs.ErrorDialog
+import com.example.educacioncontinua.ui.dialogs.SuccessDialog
+import com.example.educacioncontinua.model.RetrofitApi
+import com.example.educacioncontinua.model.data.Assistance
+import com.example.educacioncontinua.model.data.Course
+import com.example.educacioncontinua.model.data.WorkingDay
+import com.example.educacioncontinua.viewmodel.DataViewModel
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.android.BeepManager
 import com.journeyapps.barcodescanner.DefaultDecoderFactory
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -38,14 +37,16 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
     private var _binding: FragmentQrBinding? = null
     private val binding get() = _binding!!
     private lateinit var course: Course
-    private lateinit var journeys: List<WorkingDay>
+    private lateinit var workingDays: List<WorkingDay>
     private lateinit var mainActivity: MainActivity
     private val args: QrFragmentArgs by navArgs()
     private var lastText: String? = null
     private var isModal = false
     private var idJourney = 0
-    private val listJourneysString = mutableListOf<String>()
+    private val listWorkingDaysString = mutableListOf<String>()
     private lateinit var dialog: Dialog
+
+    private val model: DataViewModel by activityViewModels()
 
     @Inject
     lateinit var retrofitApi: RetrofitApi
@@ -54,17 +55,22 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
         const val REQUEST_KEY = "qrFragment"
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        course = args.course
+        workingDays = args.workingDays.toList()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        course = args.course
-        journeys = args.journeys.toList()
+        dialog = mainActivity.setUpDialogCharging(getString(R.string.checking))
         _binding = FragmentQrBinding.inflate(inflater, container, false)
         initView()
+        initObserver()
         checkCameraPermission()
         fillAdapter()
-        setUpDialogCheck()
         initFragmentResultListener()
         return binding.root
     }
@@ -87,15 +93,12 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
             barcodeScanner.decodeContinuous {
                 if (it.text != null) {
                     beepManager.playBeepSoundAndVibrate()
-                    if (lastText != null) {
-                        if (lastText.equals(it.text)) {
-                            pause()
-                            openErrorDialog("El Qr ya fue leído con éxito")
-                        }
-                    } else {
-                        dialog.show()
+                    if (lastText != null && lastText.equals(it.text)) {
                         pause()
-                        checkAttendance(it.text);
+                        openErrorDialog("El Qr ya fue leído con éxito")
+                    } else {
+                        pause()
+                        model.checkAttendance(course.id, idJourney, it.text)
                     }
                 }
             }
@@ -111,7 +114,6 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
 
     private fun initView() {
         binding.textViewTitulo.text = course.name
-        binding.floatActionButton.setOnClickListener { mainActivity.signOut() }
     }
 
     private fun checkCameraPermission() {
@@ -129,50 +131,37 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
         }
     }
 
-    private fun pause() = binding.barcodeScanner.pause()
-
-    private fun resume() = binding.barcodeScanner.resume()
-
-    private fun checkAttendance(resultQr: String) {
-        val call = retrofitApi.assistance(course.id, idJourney, resultQr)
-        call.enqueue(object : Callback<AssistanceResponse> {
-            override fun onResponse(
-                call: Call<AssistanceResponse>,
-                response: Response<AssistanceResponse>
-            ) {
-                dialog.dismiss();
-                try {
-                    if (response.isSuccessful) {
-                        lastText = resultQr
-                        openSuccessDialog(response.body()!!)
-                    } else {
-                        lastText = null
-                        openErrorDialog(msgError(response.code()))
-                    }
-                } catch (ex: Exception) {
-                    lastText = null
-                    toast("Error tipografico")
+    private fun initObserver() {
+        model.getAssistance().observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let { res ->
+                openSuccessDialog(res)
+            }
+        })
+        model.getMessage().observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let { msg ->
+                openErrorDialog(msg)
+            }
+        })
+        model.isLoading().observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let { isLoading ->
+                if (isLoading) {
+                    dialog.show()
+                } else {
+                    dialog.dismiss()
                 }
             }
-
-            override fun onFailure(call: Call<AssistanceResponse>, t: Throwable) {
-                lastText = null
-                resume()
-                dialog.dismiss()
-                toast("La peticion fallo.. vuelva a intentarlo")
+        })
+        model.getValueQr().observe(viewLifecycleOwner, Observer {
+            it.getContentIfNotHandled()?.let { qr ->
+                lastText = if (qr.isNotEmpty()) qr else null
             }
-
         })
     }
 
 
-    private fun msgError(code: Int): String = when (code) {
-        400 -> "No se encontro la jornada."
-        409 -> "La asistecia ya fue registrada."
-        412 -> "El participante no se encuentra inscrito."
-        500 -> "El Qr es invalido."
-        else -> "Error no identificado"
-    }
+    private fun pause() = binding.barcodeScanner.pause()
+
+    private fun resume() = binding.barcodeScanner.resume()
 
     override fun onResume() {
         super.onResume()
@@ -190,8 +179,8 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
 
 
     private fun fillAdapter() {
-        listJourneysString.clear()
-        journeys.forEach { listJourneysString.add("${it.dayDateString} - ${it.startTimeString}") }
+        listWorkingDaysString.clear()
+        workingDays.forEach { listWorkingDaysString.add("${it.dayDateString} - ${it.startTimeString}") }
         fillDropdownMenu();
     }
 
@@ -199,17 +188,17 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
         val adapter = ArrayAdapter(
             mainActivity,
             R.layout.dropdown_menu_popup_item,
-            listJourneysString
+            listWorkingDaysString
         )
         binding.filledExposedDropdown.setAdapter(adapter);
-        binding.filledExposedDropdown.setText(listJourneysString[0], false)
-        getIds(listJourneysString[0]);
+        binding.filledExposedDropdown.setText(listWorkingDaysString[0], false)
+        getIds(listWorkingDaysString[0]);
         binding.filledExposedDropdown.onItemClickListener = this
     }
 
 
     private fun getIds(selection: String) {
-        journeys.forEach {
+        workingDays.forEach {
             val value = "${it.dayDateString} - ${it.startTimeString}"
             if (value == selection) {
                 idJourney = it.id
@@ -223,18 +212,9 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
         }
     }
 
-    private fun setUpDialogCheck(): Dialog {
-        dialog = Dialog(mainActivity)
-        dialog.setCancelable(false)
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.setContentView(R.layout.progress_bar_jornadas)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        return dialog
-    }
-
-    private fun openSuccessDialog(assistanceResponse: AssistanceResponse) {
+    private fun openSuccessDialog(assistance: Assistance) {
         isModal = true
-        SuccessDialog.newInstance(assistanceResponse).show(childFragmentManager, "successDialog")
+        SuccessDialog.newInstance(assistance).show(childFragmentManager, "successDialog")
 
     }
 

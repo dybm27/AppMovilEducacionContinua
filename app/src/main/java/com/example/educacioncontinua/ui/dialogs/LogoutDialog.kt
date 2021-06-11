@@ -1,4 +1,4 @@
-package com.example.educacioncontinua.dialogs
+package com.example.educacioncontinua.ui.dialogs
 
 import android.app.Dialog
 import android.graphics.Color
@@ -10,23 +10,13 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
-import com.example.educacioncontinua.databinding.ModalJornadasErrorBinding
-import com.example.educacioncontinua.fragments.QrFragment
+import com.example.educacioncontinua.databinding.LayoutLogoutDialogBinding
+import com.example.educacioncontinua.ui.home.HomeFragment
 
-class ErrorDialog : DialogFragment() {
+class LogoutDialog : DialogFragment() {
 
-    private var _binding: ModalJornadasErrorBinding? = null
+    private var _binding: LayoutLogoutDialogBinding? = null
     private val binding get() = _binding!!
-
-    companion object {
-        private const val EXTRA_SMG = "msg"
-
-        fun newInstance(msg: String): ErrorDialog {
-            return ErrorDialog().apply {
-                arguments = bundleOf(EXTRA_SMG to msg)
-            }
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,12 +24,14 @@ class ErrorDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        _binding = ModalJornadasErrorBinding.inflate(inflater, container, false)
+        _binding = LayoutLogoutDialogBinding.inflate(inflater, container, false)
         with(binding) {
-            textViewErrorModal.text = arguments?.getString(EXTRA_SMG)
-            btnModalError.setOnClickListener {
+            buttonLogoutDialogAccept.setOnClickListener {
                 dismiss()
-                setFragmentResult(QrFragment.REQUEST_KEY, bundleOf())
+                setFragmentResult(HomeFragment.REQUEST_KEY, bundleOf())
+            }
+            buttonLogoutDialogCancel.setOnClickListener {
+                dismiss()
             }
         }
         return binding.root

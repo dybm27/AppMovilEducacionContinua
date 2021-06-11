@@ -6,7 +6,7 @@
     app:startDestination="@id/splashFragment">
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.educacioncontinua.fragments.LoginFragment"
+        android:name="com.example.educacioncontinua.ui.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.educacioncontinua.fragments.HomeFragment"
+        android:name="com.example.educacioncontinua.ui.home.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -30,11 +30,11 @@
             app:destination="@id/qrFragment" />
         <argument
             android:name="user"
-            app:argType="com.example.educacioncontinua.models.User" />
+            app:argType="com.example.educacioncontinua.model.data.User" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.educacioncontinua.fragments.SplashFragment"
+        android:name="com.example.educacioncontinua.ui.splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash" >
         <action
@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/qrFragment"
-        android:name="com.example.educacioncontinua.fragments.QrFragment"
+        android:name="com.example.educacioncontinua.ui.qr.QrFragment"
         android:label="fragment_qr"
         tools:layout="@layout/fragment_qr" >
         <action
@@ -60,9 +60,9 @@
             app:popUpToInclusive="true" />
         <argument
             android:name="course"
-            app:argType="com.example.educacioncontinua.models.Course" />
+            app:argType="com.example.educacioncontinua.model.data.Course" />
         <argument
-            android:name="journeys"
-            app:argType="com.example.educacioncontinua.models.WorkingDay[]" />
+            android:name="workingDays"
+            app:argType="com.example.educacioncontinua.model.data.WorkingDay[]" />
     </fragment>
 </navigation>

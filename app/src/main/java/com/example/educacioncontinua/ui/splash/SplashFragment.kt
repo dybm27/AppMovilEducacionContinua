@@ -1,4 +1,4 @@
-package com.example.educacioncontinua.fragments
+package com.example.educacioncontinua.ui.splash
 
 import android.os.Bundle
 import android.os.Handler
@@ -10,19 +10,19 @@ import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.educacioncontinua.R
 import com.example.educacioncontinua.databinding.FragmentSplashBinding
-import com.example.educacioncontinua.interfaces.RetrofitApi
-import com.example.educacioncontinua.models.User
-import com.example.educacioncontinua.toast
+import com.example.educacioncontinua.model.RetrofitApi
+import com.example.educacioncontinua.model.data.User
+import com.example.educacioncontinua.viewmodel.DataViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,6 +31,7 @@ class SplashFragment : Fragment() {
     private var _binding: FragmentSplashBinding? = null
     private val binding get() = _binding!!
     private lateinit var callback: OnBackPressedCallback
+    private val model: DataViewModel by activityViewModels()
 
     companion object {
         private const val SPLASH_SCREEN = 2000L
@@ -49,14 +50,27 @@ class SplashFragment : Fragment() {
         _binding = FragmentSplashBinding.inflate(inflater, container, false)
         val bottomAnimation = AnimationUtils.loadAnimation(context, R.anim.bottom_animation)
         val lestAnimation = AnimationUtils.loadAnimation(context, R.anim.left_animation)
-
         binding.ivSplashButtom.animation = bottomAnimation
         binding.ivLogoUfps.animation = lestAnimation
-
         callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
             println("Se desactiva el boton atras")
         }
+        initObserver()
         return binding.root
+    }
+
+    private fun initObserver() {
+        model.getUser().observe(viewLifecycleOwner, Observer { it ->
+            it.getContentIfNotHandled()?.let { user ->
+                startSplash(user)
+            }
+        })
+        model.getMessage().observe(viewLifecycleOwner, Observer {
+            googleSignInClient.revokeAccess()
+                .addOnCompleteListener(requireActivity()) {
+                }
+            startSplash(null)
+        })
     }
 
     override fun onStart() {
@@ -67,46 +81,24 @@ class SplashFragment : Fragment() {
 
     private fun verifyUser(account: GoogleSignInAccount?) {
         if (account != null) {
-            val call = retrofitApi.verifyUser(account.idToken)
-            call.enqueue(object : Callback<User?> {
-                override fun onResponse(call: Call<User?>, response: Response<User?>) {
-                    try {
-                        if (response.isSuccessful) {
-                            startSplash(response.body())
-                        } else {
-                            revokeAccess()
-                        }
-                    } catch (ex: Exception) {
-                        startSplash(null)
-                    }
-                }
-
-                override fun onFailure(call: Call<User?>, t: Throwable) {
-                   startSplash(null)
-                }
-            })
+            model.verifyUser(account.idToken)
         } else {
             startSplash(null)
         }
     }
 
-    private fun revokeAccess() {
-        googleSignInClient.revokeAccess()
-            .addOnCompleteListener(requireActivity()) {
-                startSplash(null)
-            }
-    }
-
     fun startSplash(user: User?) {
         Handler(Looper.getMainLooper()).postDelayed({
-            if (user != null) {
-                findNavController().navigate(
-                    SplashFragmentDirections.actionSplashFragmentToHomeFragment(
-                        user
+            lifecycleScope.launchWhenResumed {
+                if (user != null) {
+                    findNavController().navigate(
+                        SplashFragmentDirections.actionSplashFragmentToHomeFragment(
+                            user
+                        )
                     )
-                )
-            } else {
-                findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
+                } else {
+                    findNavController().navigate(SplashFragmentDirections.actionSplashFragmentToLoginFragment())
+                }
             }
         }, SPLASH_SCREEN)
     }

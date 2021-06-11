@@ -10,13 +10,13 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_label">Buscar</string>
-    <string name="journeys">Jornadas</string>
-    <string name="cargando">Cargando..</string>
-    <string name="mensajeSinPermiso">Sin permiso de Camara. Este permiso es necesario para poder usar el lector QR</string>
+    <string name="workingDays">Jornadas</string>
+    <string name="charging">Cargando..</string>
+    <string name="mensajeSinPermiso">Sin permiso para la camara. Este permiso es necesario para poder usar el lector QR</string>
     <string name="icon_date">Fecha</string>
     <string name="titulo">CURSOS Y EVENTOS DE EDUCACIÓN CONTINUA UFPS</string>
     <string name="btn_google">Iniciar Sesión</string>
-    <string name="verificando">Verificando…</string>
+    <string name="checking">Verificando…</string>
     <string name="tituloCursos">LISTA DE EVENTOS Y CURSOS DISPONIBLES</string>
     <string name="logo_app">Logo App</string>
     <string name="dise_o_top">diseño top</string>
@@ -26,7 +26,8 @@
     <string name="tipo_de_participante">"Tipo de Participante: "</string>
     <string name="documento">"Documento: "</string>
     <string name="datos_del_paticipante">Datos del paticipante</string>
-    <string name="aceptar">Aceptar</string>
+    <string name="accept">Aceptar</string>
     <string name="sin_cursos">No tiene asignados cursos y/o eventos de educación continua \'en desarrollo\' para la toma de asistencia.</string>
     <string name="btn_floating">Floating action button</string>
+    <string name="cancel">Cancelar</string>
 </resources>
