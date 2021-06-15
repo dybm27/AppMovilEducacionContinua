@@ -13,7 +13,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import com.example.educacioncontinua.databinding.ModalJornadasExitoBinding
-import com.example.educacioncontinua.model.data.Assistance
+import com.example.educacioncontinua.data.model.Assistance
 import com.example.educacioncontinua.ui.qr.QrFragment
 
 class SuccessDialog : DialogFragment() {

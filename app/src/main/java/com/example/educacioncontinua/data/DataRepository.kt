@@ -1,11 +1,7 @@
-package com.example.educacioncontinua.model
+package com.example.educacioncontinua.data
 
 import android.util.Log
-import com.example.educacioncontinua.model.data.*
-import com.example.educacioncontinua.toast
-import com.example.educacioncontinua.viewmodel.Event
-import retrofit2.Response
-import retrofit2.http.Path
+import com.example.educacioncontinua.data.model.*
 import javax.inject.Inject
 
 class DataRepository @Inject constructor(private val retrofitApi: RetrofitApi) {

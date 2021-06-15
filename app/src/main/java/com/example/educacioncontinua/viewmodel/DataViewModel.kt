@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.educacioncontinua.model.DataRepository
-import com.example.educacioncontinua.model.data.Assistance
-import com.example.educacioncontinua.model.data.Course
-import com.example.educacioncontinua.model.data.User
-import com.example.educacioncontinua.model.data.WorkingDay
+import com.example.educacioncontinua.data.DataRepository
+import com.example.educacioncontinua.data.model.Assistance
+import com.example.educacioncontinua.data.model.Course
+import com.example.educacioncontinua.data.model.User
+import com.example.educacioncontinua.data.model.WorkingDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

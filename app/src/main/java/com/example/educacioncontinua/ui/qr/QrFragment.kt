@@ -20,10 +20,10 @@ import com.example.educacioncontinua.R
 import com.example.educacioncontinua.databinding.FragmentQrBinding
 import com.example.educacioncontinua.ui.dialogs.ErrorDialog
 import com.example.educacioncontinua.ui.dialogs.SuccessDialog
-import com.example.educacioncontinua.model.RetrofitApi
-import com.example.educacioncontinua.model.data.Assistance
-import com.example.educacioncontinua.model.data.Course
-import com.example.educacioncontinua.model.data.WorkingDay
+import com.example.educacioncontinua.data.RetrofitApi
+import com.example.educacioncontinua.data.model.Assistance
+import com.example.educacioncontinua.data.model.Course
+import com.example.educacioncontinua.data.model.WorkingDay
 import com.example.educacioncontinua.viewmodel.DataViewModel
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.android.BeepManager

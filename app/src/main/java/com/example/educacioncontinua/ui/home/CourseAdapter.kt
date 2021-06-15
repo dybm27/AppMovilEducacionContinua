@@ -8,7 +8,7 @@ import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.example.educacioncontinua.R
 import com.example.educacioncontinua.databinding.CardCourseItemBinding
-import com.example.educacioncontinua.model.data.Course
+import com.example.educacioncontinua.data.model.Course
 
 class CourseAdapter(
     private val context: Context,

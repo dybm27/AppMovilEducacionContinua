@@ -1,9 +1,9 @@
-package com.example.educacioncontinua.model
+package com.example.educacioncontinua.data
 
-import com.example.educacioncontinua.model.data.Assistance
-import com.example.educacioncontinua.model.data.Course
-import com.example.educacioncontinua.model.data.User
-import com.example.educacioncontinua.model.data.WorkingDay
+import com.example.educacioncontinua.data.model.Assistance
+import com.example.educacioncontinua.data.model.Course
+import com.example.educacioncontinua.data.model.User
+import com.example.educacioncontinua.data.model.WorkingDay
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

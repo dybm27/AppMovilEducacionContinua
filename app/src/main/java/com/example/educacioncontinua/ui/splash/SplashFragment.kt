@@ -16,8 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.educacioncontinua.R
 import com.example.educacioncontinua.databinding.FragmentSplashBinding
-import com.example.educacioncontinua.model.RetrofitApi
-import com.example.educacioncontinua.model.data.User
+import com.example.educacioncontinua.data.RetrofitApi
+import com.example.educacioncontinua.data.model.User
 import com.example.educacioncontinua.viewmodel.DataViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount

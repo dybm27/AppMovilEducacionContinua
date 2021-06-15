@@ -1,6 +1,6 @@
 package com.example.educacioncontinua.di
 
-import com.example.educacioncontinua.model.RetrofitApi
+import com.example.educacioncontinua.data.RetrofitApi
 import dagger.Module
 import dagger.Provides
 import dagger.Reusable

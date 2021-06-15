@@ -20,10 +20,10 @@ import com.example.educacioncontinua.MainActivity
 import com.example.educacioncontinua.R
 import com.example.educacioncontinua.databinding.FragmentHomeBinding
 import com.example.educacioncontinua.ui.dialogs.LogoutDialog
-import com.example.educacioncontinua.model.RetrofitApi
-import com.example.educacioncontinua.model.data.Course
-import com.example.educacioncontinua.model.data.User
-import com.example.educacioncontinua.model.data.WorkingDay
+import com.example.educacioncontinua.data.RetrofitApi
+import com.example.educacioncontinua.data.model.Course
+import com.example.educacioncontinua.data.model.User
+import com.example.educacioncontinua.data.model.WorkingDay
 import com.example.educacioncontinua.toast
 import com.example.educacioncontinua.viewmodel.DataViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignInClient

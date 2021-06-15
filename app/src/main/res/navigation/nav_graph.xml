@@ -30,7 +30,7 @@
             app:destination="@id/qrFragment" />
         <argument
             android:name="user"
-            app:argType="com.example.educacioncontinua.model.data.User" />
+            app:argType="com.example.educacioncontinua.data.model.User" />
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
@@ -60,9 +60,9 @@
             app:popUpToInclusive="true" />
         <argument
             android:name="course"
-            app:argType="com.example.educacioncontinua.model.data.Course" />
+            app:argType="com.example.educacioncontinua.data.model.Course" />
         <argument
             android:name="workingDays"
-            app:argType="com.example.educacioncontinua.model.data.WorkingDay[]" />
+            app:argType="com.example.educacioncontinua.data.model.WorkingDay[]" />
     </fragment>
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.educacioncontinua.model.data
+package com.example.educacioncontinua.data.model
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
