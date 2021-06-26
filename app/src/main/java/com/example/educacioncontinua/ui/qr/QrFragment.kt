@@ -132,17 +132,17 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
     }
 
     private fun initObserver() {
-        model.getAssistance().observe(viewLifecycleOwner, Observer {
+        model.assistance.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { res ->
                 openSuccessDialog(res)
             }
         })
-        model.getMessage().observe(viewLifecycleOwner, Observer {
+        model.message.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { msg ->
                 openErrorDialog(msg)
             }
         })
-        model.isLoading().observe(viewLifecycleOwner, Observer {
+        model.isLoading.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { isLoading ->
                 if (isLoading) {
                     dialog.show()
@@ -151,7 +151,7 @@ class QrFragment : Fragment(), AdapterView.OnItemClickListener {
                 }
             }
         })
-        model.getValueQr().observe(viewLifecycleOwner, Observer {
+        model.valueQr.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { qr ->
                 lastText = if (qr.isNotEmpty()) qr else null
             }

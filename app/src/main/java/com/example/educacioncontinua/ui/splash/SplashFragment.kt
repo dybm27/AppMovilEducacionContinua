@@ -60,12 +60,12 @@ class SplashFragment : Fragment() {
     }
 
     private fun initObserver() {
-        model.getUser().observe(viewLifecycleOwner, Observer { it ->
+        model.user.observe(viewLifecycleOwner, Observer { it ->
             it.getContentIfNotHandled()?.let { user ->
                 startSplash(user)
             }
         })
-        model.getMessage().observe(viewLifecycleOwner, Observer {
+        model.message.observe(viewLifecycleOwner, Observer {
             googleSignInClient.revokeAccess()
                 .addOnCompleteListener(requireActivity()) {
                 }

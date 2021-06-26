@@ -94,7 +94,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun initObserver() {
-        model.getUser().observe(viewLifecycleOwner, Observer {
+        model.user.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { user ->
                 findNavController().navigate(
                     LoginFragmentDirections.actionLoginFragmentToHomeFragment(
@@ -103,7 +103,7 @@ class LoginFragment : Fragment() {
                 )
             }
         })
-        model.getMessage().observe(viewLifecycleOwner, Observer {
+        model.message.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { msg ->
                 googleSignInClient.revokeAccess()
                     .addOnCompleteListener(requireActivity()) {
@@ -111,7 +111,7 @@ class LoginFragment : Fragment() {
                     }
             }
         })
-        model.isLoading().observe(viewLifecycleOwner, Observer {
+        model.isLoading.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { isLoading ->
                 binding.signInButton.isEnabled = !isLoading
             }

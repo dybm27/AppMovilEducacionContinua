@@ -96,7 +96,7 @@ class HomeFragment : Fragment(), CallbackWorkingDay {
     }
 
     private fun initObserver() {
-        model.getCourses().observe(viewLifecycleOwner, Observer {
+        model.courses.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { list ->
                 courses.clear()
                 if (list.isNotEmpty()) {
@@ -110,12 +110,12 @@ class HomeFragment : Fragment(), CallbackWorkingDay {
                 adapter.setData(courses)
             }
         })
-        model.getMessage().observe(viewLifecycleOwner, Observer {
+        model.message.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { msg ->
                 toast(msg)
             }
         })
-        model.isLoading().observe(viewLifecycleOwner, Observer {
+        model.isLoading.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { isShow ->
                 if (isShow) {
                     dialog.show()
@@ -125,7 +125,7 @@ class HomeFragment : Fragment(), CallbackWorkingDay {
                 }
             }
         })
-        model.getWorkingsDays().observe(viewLifecycleOwner, Observer {
+        model.workingsDays.observe(viewLifecycleOwner, Observer {
             it.getContentIfNotHandled()?.let { list ->
                 openWorkingDays(list, idEdu)
             }
