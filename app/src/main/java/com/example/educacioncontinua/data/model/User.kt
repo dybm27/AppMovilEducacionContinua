@@ -11,11 +11,11 @@ data class User(
     @SerializedName("primerNombre")
     val firstName: String,
     @SerializedName("segundoNombre")
-    val secondName: String,
+    val secondName: String?,
     @SerializedName("primerApellido")
     val surname: String,
     @SerializedName("segundoApellido")
-    val secondSurname: String,
+    val secondSurname: String?,
     @SerializedName("email")
     val email: String,
     @SerializedName("telefono")

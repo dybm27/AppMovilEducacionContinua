@@ -64,8 +64,8 @@ class HomeFragment : Fragment(), CallbackWorkingDay {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         user = args.user
@@ -88,7 +88,14 @@ class HomeFragment : Fragment(), CallbackWorkingDay {
     }
 
     private fun initView() {
-        val name = "${user.firstName} ${user.secondName} ${user.surname} ${user.secondSurname}"
+        var name = user.firstName
+        user.secondName?.let {
+            name += " $it"
+        }
+        name += " ${user.surname}"
+        user.secondSurname?.let {
+            name += " $it"
+        }
         val type = verifyTypeUser()
         binding.textViewNombre.text = name
         binding.textViewTipo.text = type
@@ -174,10 +181,10 @@ class HomeFragment : Fragment(), CallbackWorkingDay {
         val course = getCourse(idContinue)
         if (workingDays.isNotEmpty()) {
             findNavController().navigate(
-                HomeFragmentDirections.actionHomeFragmentToQrFragment(
-                    course,
-                    workingDays.toTypedArray()
-                )
+                    HomeFragmentDirections.actionHomeFragmentToQrFragment(
+                            course,
+                            workingDays.toTypedArray()
+                    )
             )
         } else {
             toast("No hay jornadas disponibles.")
@@ -185,7 +192,7 @@ class HomeFragment : Fragment(), CallbackWorkingDay {
     }
 
     private fun getCourse(id: Int): Course =
-        courses.find { course -> course.id == id }!!
+            courses.find { course -> course.id == id }!!
 
     private fun initFragmentResultListener() {
         childFragmentManager.setFragmentResultListener(REQUEST_KEY, this)
@@ -206,9 +213,9 @@ class HomeFragment : Fragment(), CallbackWorkingDay {
 
     private fun signOut() {
         googleSignInClient.signOut()
-            .addOnCompleteListener(mainActivity) {
-                findNavController()
-                    .navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment())
-            }
+                .addOnCompleteListener(mainActivity) {
+                    findNavController()
+                            .navigate(HomeFragmentDirections.actionHomeFragmentToLoginFragment())
+                }
     }
 }

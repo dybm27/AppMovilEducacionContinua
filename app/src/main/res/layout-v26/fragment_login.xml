@@ -60,6 +60,7 @@
             android:text="@string/btn_google"
             android:textColor="@color/colorBlack"
             app:icon="@drawable/ic_google"
+            android:autoSizeTextType="uniform"
             android:textSize="12sp"
             app:iconTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
