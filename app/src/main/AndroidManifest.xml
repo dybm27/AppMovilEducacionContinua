@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="LockedOrientationActivity"
-    package="com.example.educacioncontinua">
+    package="com.ufps.geduco">
 
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 

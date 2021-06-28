@@ -60,7 +60,7 @@
 -keep,allowobfuscation interface <1>
 
 # excluir models
--keepnames class com.example.educacioncontinua.data.model.*
+-keepnames class com.ufps.geduco.data.model.*
 
 #-keepnames class * extends androidx.fragment.app.Fragment{}
 #-keepnames class * extends android.os.Parcelable
